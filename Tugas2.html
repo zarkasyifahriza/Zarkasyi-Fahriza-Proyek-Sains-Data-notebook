@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Markdown Files &#8212; My sample book</title>
+    <link rel="stylesheet" href="styles.css">
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'markdown';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Content with notebooks" href="notebooks.html" />
+    <link rel="prev" title="Welcome to your Jupyter Book" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="My sample book - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+      <li class="toctree-l1"><a class="reference internal" href="Tugas1.html">Tugas 1</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="Tugas2.html">Tugas 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tugas3.html">Tugas 3</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmarkdown.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/markdown.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Markdown Files</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-myst">What is MyST?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-roles-and-directives">Sample Roles and Directives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citations">Citations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learn-more">Learn more</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="markdown-files">
+<h1>PREDIKSI HARGA RUMAH UNTUK MENINGKATKAN TRASNPARANSI DALAM TRANSAKSI JUAL BELI DI TEBET JAKARTA SELATAN<a class="headerlink" href="#markdown-files" title="Link to this heading">#</a></h1>
+<h2 id="Pendahuluan">Pendahuluan</h2>
+<h3 id="Latar Belakang">Latar Belakang</h3>
+<p>Transaksi jual beli properti, khususnya di kawasan perkotaan seperti Tebet, Jakarta Selatan, seringkali diwarnai oleh ketidakjelasan informasi mengenai harga pasar. Faktor-faktor seperti luas bangunan, luas tanah, jumlah kamar, jumlah kamar mandi, dan fasilitas tambahan (seperti garasi) dapat memengaruhi harga suatu properti. Namun, kurangnya transparansi dalam penentuan harga sering kali menimbulkan kebingungan bagi pembeli maupun penjual.
+  Dalam era digital dan data-driven, metode statistik dan pembelajaran mesin, seperti decision tree, dapat dimanfaatkan untuk memprediksi harga properti berdasarkan data historis. Dengan menggunakan metode ini, masyarakat dapat memperoleh estimasi harga yang lebih objektif dan transparan, sehingga mendukung pengambilan keputusan yang lebih baik dalam transaksi jual beli properti. 
+  Penelitian ini bertujuan untuk membangun model prediksi harga properti di kawasan Tebet, Jakarta Selatan. Dengan menganalisis data dari berbagai parameter, model ini diharapkan mampu memberikan gambaran harga pasar yang realistis dan meningkatkan transparansi dalam transaksi jual beli properti. Pendekatan ini diharapkan dapat meminimalkan kesenjangan informasi antara penjual dan pembeli, serta mendorong efisiensi di pasar properti.
+</p>
+<h3 id="Tujuan">Tujuan</h3>
+<p>Pengembangan alat bantu prediksi harga properti berbasis metode regresi linear merupakan langkah inovatif untuk meningkatkan efisiensi dan keadilan dalam transaksi jual beli properti di kawasan Tebet, Jakarta Selatan. Alat ini dirancang untuk menghasilkan estimasi harga properti yang akurat dengan memanfaatkan data historis serta karakteristik properti, seperti luas bangunan, luas tanah, jumlah kamar tidur, kamar mandi, dan fasilitas tambahan lainnya.
+  Melalui pendekatan berbasis data, alat bantu ini diharapkan mampu memberikan estimasi harga yang objektif dan transparan. Hal ini tidak hanya membantu pembeli dalam memahami harga pasar yang wajar, tetapi juga memberikan panduan kepada penjual untuk menentukan harga jual yang kompetitif. Selain itu, agen properti juga dapat memanfaatkan alat ini sebagai referensi dalam negosiasi dan penawaran.
+  Dengan teknologi prediksi yang mudah diakses, alat bantu ini dirancang untuk mengurangi ketidakpastian dan kesenjangan informasi antara pihak-pihak yang terlibat dalam transaksi properti. Transparansi yang dihasilkan dari penggunaan alat ini diyakini akan mendorong kepercayaan antara pembeli dan penjual, serta meningkatkan efisiensi pasar properti secara keseluruhan.
+</p>
+<h3 id="Rumusan Masalah">Rumusan Masalah</h3>
+<p>Bagaimana cara membangun alat bantu prediksi harga properti yang akurat dan objektif di kawasan Tebet, Jakarta Selatan? Membangun alat bantu prediksi harga properti yang akurat dan objektif memerlukan pengumpulan dan analisis data historis yang relevan dengan harga pasar properti di kawasan Tebet. Hal ini mencakup karakteristik properti seperti luas bangunan, luas tanah, jumlah kamar tidur, jumlah kamar mandi, dan fasilitas lain yang memengaruhi harga. Penelitian ini bertujuan untuk mengembangkan model prediksi berbasis metode Decision tree yang mampu memberikan estimasi harga yang dapat diandalkan bagi pembeli dan penjual properti.</p>
+
+<h2 id="Data Understanding">Data Understanding</h2>
+<p>
+  Pada Tugas proyek pertama matakuliah Proyek Sains Data kali ini saya melakukan prediksi harga rumah menggunakan metode decision tree,
+  Dataset yang saya gunakan diambil dari website kaggle, berikut link dataset nya 
+  <a href="https://www.kaggle.com/datasets/wisnuanggara/daftar-harga-rumah" target="_blank">Daftar Harga Rumah</a>.
+</p>
+<p>
+  Dataset ini memiliki 7 fitur yaitu:
+</p>
+<ul>
+  <li><b>NAMA RUMAH</b>: title rumah.</li>
+  <li><b>HARGA</b>: harga dari rumah.</li>
+  <li><b>LB</b>: jumlah luas bangunan.</li>
+  <li><b>LT</b>: jumlah luas tanah.</li>
+  <li><b>KT</b>: jumlah kamar tidur.</li>
+  <li><b>KM</b>: jumlah kamar mandi.</li>
+  <li><b>GRS</b>: jumlah kapasitas mobil dalam garasi.</li>
+</ul>
+
+<p>
+  Dataset ini memiliki 1010 baris data.
+</p>
+
+<h3>Import library</h3>
+<div class="code-box">
+  <pre><code>
+    import numpy as np 
+    import pandas as pd 
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split, GridSearchCV
+    from sklearn.linear_model import Ridge
+    from sklearn.pipeline import make_pipeline
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+    import warnings
+    warnings.filterwarnings('ignore')
+  </code></pre>
+</div>
+
+<h3>Meyambungkan dengan G drive</h3>
+<div class="code-box">
+  <pre><code>
+    from google.colab import drive
+    drive.mount('/content/drive')
+  </code></pre>
+</div>
+
+<h3 id="Menampilkan Data">Menampilkan Data</h3>
+<div class="code-box">
+  <pre><code>
+    df = pd.read_excel('/content/drive/MyDrive/PSD/DATA RUMAH.xlsx')
+    df.head()
+  </code></pre>
+</div>
+
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+      <tr>
+          <th>NO</th>
+          <th>NAMA RUMAH</th>
+          <th>HARGA</th>
+          <th>LB</th>
+          <th>LT</th>
+          <th>KT</th>
+          <th>KM</th>
+          <th>GRS</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
+          <td>3,800,000,000</td>
+          <td>220</td>
+          <td>220</td>
+          <td>3</td>
+          <td>3</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
+          <td>4,600,000,000</td>
+          <td>180</td>
+          <td>137</td>
+          <td>4</td>
+          <td>3</td>
+          <td>2</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
+          <td>3,000,000,000</td>
+          <td>267</td>
+          <td>250</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
+          <td>430,000,000</td>
+          <td>40</td>
+          <td>25</td>
+          <td>2</td>
+          <td>2</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
+          <td>9,000,000,000</td>
+          <td>400</td>
+          <td>355</td>
+          <td>6</td>
+          <td>5</td>
+          <td>3</td>
+      </tr>
+  </tbody>
+</table>
+
+<h3 id="Menentukan Missing Value" >Menentukan Missing Value</h3>
+<div class="code-box">
+  <pre><code>
+    df = pd.read_excel('/content/drive/MyDrive/PSD/DATA RUMAH.xlsx')
+    df.isnull().sum()
+  </code></pre>
+</div>
+
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+      <tr>
+          <th>NO</th>
+          <th>NAMA RUMAH</th>
+          <th>HARGA</th>
+          <th>LB</th>
+          <th>LT</th>
+          <th>KT</th>
+          <th>KM</th>
+          <th>GRS</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+  </tbody>
+</table>
+<p>
+  Kesimpulan: Dapat dilihat bahwa tidak terdapat missing values dalam dataset sehingga tidak dibutuhkan proses lebih lanjut untuk penanganan missing value.
+</p>
+
+<h3>Menampilkan info </h3>
+<div class="code-box">
+  <pre><code>
+    df.info()
+    print("Shape of data:")
+    print(df.shape)
+  </code></pre>
+</div>
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Kolom</th>
+      <th>Non-Null Count</th>
+      <th>Dtype</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>No</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <td>Nama Rumah</td>
+      <td>1010</td>
+      <td>object</td>
+    </tr>
+    <tr>
+      <td>Harga</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <td>LB (Luas Bangunan)</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <td>LT (Luas Tanah)</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <td>KT (Jumlah Kamar Tidur)</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <td>KM (Jumlah Kamar Mandi)</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+    <tr>
+      <td>GRS (Jumlah Garasi)</td>
+      <td>1010</td>
+      <td>int64</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Shape of Data:</strong> (1010, 8)</p>
+
+<h3>Rename Nama Fitur </h3>
+<div class="code-box">
+  <pre><code>
+    df = df.rename(columns={
+      'NO': 'nomor',
+      'NAMA RUMAH': 'nama_rumah',
+      'HARGA': 'harga',
+      'LB': 'lb',
+      'LT': 'lt',
+      'KT': 'kt',
+      'KM': 'km',
+      'GRS': 'grs'
+  })
+  df
+  </code></pre>
+</div>
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+    <tr>
+      <th>nomor</th>
+      <th>nama_rumah</th>
+      <th>harga</th>
+      <th>lb</th>
+      <th>lt</th>
+      <th>kt</th>
+      <th>km</th>
+      <th>grs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
+      <td>3800000000</td>
+      <td>220</td>
+      <td>220</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
+      <td>4600000000</td>
+      <td>180</td>
+      <td>137</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
+      <td>3000000000</td>
+      <td>267</td>
+      <td>250</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
+      <td>430000000</td>
+      <td>40</td>
+      <td>25</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
+      <td>9000000000</td>
+      <td>400</td>
+      <td>355</td>
+      <td>6</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>1010 rows × 8 columns</strong></p>
+
+<h3>Mengganti satuan harga agar lebih readable</h3>
+<div class="code-box">
+  <pre><code>
+    df['harga'] = (df['harga']/1000000).astype(int)
+    df.drop(columns=['nomor'], inplace=True)
+    df.head()
+  </code></pre>
+</div>
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+    <tr>
+      <th>nama_Rumah</th>
+      <th>harga</th>
+      <th>lb</th>
+      <th>lt</th>
+      <th>kt</th>
+      <th>km</th>
+      <th>grs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
+      <td>3800</td>
+      <td>220</td>
+      <td>220</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
+      <td>4600</td>
+      <td>180</td>
+      <td>137</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
+      <td>3000</td>
+      <td>267</td>
+      <td>250</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
+      <td>430</td>
+      <td>40</td>
+      <td>25</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
+      <td>9000</td>
+      <td>400</td>
+      <td>355</td>
+      <td>6</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Mengklasifikasikan harga rumah menjadi tiga kategori</h3>
+<div class="code-box">
+  <pre><code>
+    q1 = df['harga'].quantile(0.25)
+    median = df['harga'].median()
+    q3 = df['harga'].quantile(0.75)
+    
+    def classification_harga(harga):
+        if harga <= q1:
+            return 'Murah'
+        elif harga <= median:
+            return 'Menengah'
+        else:
+            return 'Mahal'
+    
+    # Menambahkan kolom baru 'Klasifikasi Harga'
+    df['tingkat_harga'] = df['harga'].apply(classification_harga)
+    
+    # Menampilkan DataFrame dengan kolom baru
+    df.head()
+  </code></pre>
+</div>
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+    <tr>
+      <th>nama_Rumah</th>
+      <th>harga</th>
+      <th>lb</th>
+      <th>lt</th>
+      <th>kt</th>
+      <th>km</th>
+      <th>grs</th>
+      <th>Tingkat Harga</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
+      <td>3800</td>
+      <td>220</td>
+      <td>220</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>Menengah</td>
+    </tr>
+    <tr>
+      <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
+      <td>4600</td>
+      <td>180</td>
+      <td>137</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+      <td>Menengah</td>
+    </tr>
+    <tr>
+      <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
+      <td>3000</td>
+      <td>267</td>
+      <td>250</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>Murah</td>
+    </tr>
+    <tr>
+      <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
+      <td>430</td>
+      <td>40</td>
+      <td>25</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+      <td>Murah</td>
+    </tr>
+    <tr>
+      <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
+      <td>9000</td>
+      <td>400</td>
+      <td>355</td>
+      <td>6</td>
+      <td>5</td>
+      <td>3</td>
+      <td>Mahal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Distribusi dan variabilitas data</h3>
+<div class="code-box">
+  <pre><code>
+    df['harga'] = (df['harga']/1000000).astype(int)
+    df.drop(columns=['nomor'], inplace=True)
+    df.head()
+  </code></pre>
+</div>
+<table border="1">
+  <thead>
+    <tr>
+      <th>nama_Rumah</th>
+      <th>harga</th>
+      <th>lb</th>
+      <th>lt</th>
+      <th>kt</th>
+      <th>km</th>
+      <th>grs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Count</td>
+      <td>1010</td>
+      <td>1010</td>
+      <td>1010</td>
+      <td>1010</td>
+      <td>1010</td>
+      <td>1010</td>
+    </tr>
+    <tr>
+      <td>Mean</td>
+      <td>7628.98</td>
+      <td>276.54</td>
+      <td>237.43</td>
+      <td>4.67</td>
+      <td>3.61</td>
+      <td>1.92</td>
+    </tr>
+    <tr>
+      <td>Std (Standard Deviation)</td>
+      <td>7340.95</td>
+      <td>177.86</td>
+      <td>179.96</td>
+      <td>1.57</td>
+      <td>1.42</td>
+      <td>1.51</td>
+    </tr>
+    <tr>
+      <td>Min</td>
+      <td>430</td>
+      <td>40</td>
+      <td>25</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>25%</td>
+      <td>3262.5</td>
+      <td>150</td>
+      <td>130</td>
+      <td>4</td>
+      <td>3</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>50% (Median)</td>
+      <td>5000</td>
+      <td>216.5</td>
+      <td>165</td>
+      <td>4</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>75%</td>
+      <td>9000</td>
+      <td>350</td>
+      <td>290</td>
+      <td>5</td>
+      <td>4</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Max</td>
+      <td>65000</td>
+      <td>1126</td>
+      <td>1400</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  Dari fungsi .describe() diatas, kita dapat melihat beberapa statistik penting tentang kolom harga:
+</p>
+<ul>
+  <li><b>Harga Terendah</b>: 430 juta</li>
+  <li><b>Quartil 25% (Q1)</b>: 3.2 miliar</li>
+  <li><b>Median </b>:5 miliar</li>
+  <li><b>Quartil 75% (Q3)</b>: 9 miliar</li>
+  <li><b>Harga Termahal </b>:65 miliar</li>
+</ul>
+<p>Selain itu, semua kolom atau data yang digunakan, kecuali kolom nama_rumah, memiliki korelasi yang positf dengan harga.</p>
+
+<h3 id="Explorasi Data">Explorasi Data</h3>
+<div class="code-box">
+  <pre><code>
+    plt.figure(figsize=(12, 8))
+    plt.subplot(2, 3, 1)
+    sns.histplot(df['harga'], kde=True)
+    plt.title('Distribusi Harga')
+    
+    plt.subplot(2, 3, 2)
+    sns.histplot(df['lb'], kde=True)
+    plt.title('Distribusi Luas Bangunan')
+    
+    plt.subplot(2, 3, 3)
+    sns.histplot(df['lt'], kde=True)
+    plt.title('Distribusi Luas Tanah')
+    
+    plt.subplot(2, 3, 4)
+    sns.histplot(df['kt'], kde=True)
+    plt.title('Distribusi Jumlah Kamar Tidur')
+    
+    plt.subplot(2, 3, 5)
+    sns.histplot(df['km'], kde=True)
+    plt.title('Distribusi Jumlah Kamar Mandi')
+    
+    plt.subplot(2, 3, 6)
+    sns.histplot(df['grs'], kde=True)
+    plt.title('Distribusi Jumlah Garasi')
+    plt.show()
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    <img src="_images\explorasi data.png" alt="explorasi data" width="lebar" height="tinggi">
+  </code></pre>
+</div>
+<p>Berdasarkan grafik distribusi diatas dapat kita tarik kesimpulan sebagai berikut:</p>
+<ul>
+  <li>Distribusi Harga,Harga memiliki distribusi skewed ke kanan, menunjukkan mayoritas properti memiliki harga yang rendah, sementara hanya sedikit properti yang memiliki harga sangat tinggi.</li>
+  <li>Distribusi Luas Bangunan, Distribusi Luas bangunan juga skewed ke kanan, artinya sebagian besar properti memiliki luas bangunan kecil hingga sedang.Properti dengan luas bangunan besar relatif lebih sedikit.</li>
+  <li>Distribusi Luas Tanah, mayoritas properti memiliki luas tanah yang kecil hingga sedang.Properti dengan luas tanah sangat besar lebih jarang ditemukan.</li>
+  <li>Distribusi Jumlah Kamar Tidur, Mayoritas properti memiliki jumlah kamar tidur antara 3 hingga 5 kamar, dengan puncaknya di sekitar 4 kamar.Ada beberapa properti dengan jumlah kamar yang jauh lebih banyak (hingga 10), tetapi ini sangat jarang.</li>
+  <li>Distribusi Jumlah Kamar Mandi, Properti dengan 2 hingga 4 kamar mandi mendominasi, dengan puncaknya di sekitar 3 kamar mandi.</li>
+  <li>Distribusi Jumlah Garasi, Sebagian besar properti memiliki 1 hingga 3 garasi, dengan puncak distribusi di 2 garasi.</li>
+</ul>
+<p><b>Kesimpulan umum</b>:Mayoritas variabel menunjukkan distribusi yang skewed ke kanan,Sebagian besar properti memiliki karakteristik yang umum, seperti harga yang relatif rendah, ukuran bangunan dan tanah kecil hingga sedang, serta jumlah kamar tidur, kamar mandi, dan garasi yang sedang.</p>
+
+<h3 id="Menentukan Outlier">Menentukan Outlier</h3>
+<div class="code-box">
+  <pre><code>
+    # Memilih kolom numerik
+    kolom_numerik = ['harga', 'lb', 'lt', 'kt', 'km', 'grs']
+    
+    # Inisialisasi dataframe untuk menyimpan outlier
+    outlier_dict = {}
+    
+    # Perhitungan IQR untuk setiap kolom numerik
+    for kolom in kolom_numerik:
+        Q1 = df[kolom].quantile(0.25)  # Kuartil pertama (25%)
+        Q3 = df[kolom].quantile(0.75)  # Kuartil ketiga (75%)
+        IQR = Q3 - Q1  # Rentang antar-kuartil
+    
+        # Rentang normal
+        batas_bawah = Q1 - 1.5 * IQR
+        batas_atas = Q3 + 1.5 * IQR
+    
+        # Identifikasi outlier
+        outliers = df[(df[kolom] < batas_bawah) | (df[kolom] > batas_atas)]
+    
+        # Menyimpan informasi outlier
+        outlier_dict[kolom] = outliers
+    
+        print(f"Kolom: {kolom}")
+        print(f"Batas bawah: {batas_bawah}, Batas atas: {batas_atas}")
+        print(f"Jumlah outlier: {len(outliers)}\n")
+    
+  </code></pre>
+</div>
+
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+      <tr>
+          <th>Kolom</th>
+          <th>Batas Bawah</th>
+          <th>Batas Atas</th>
+          <th>Jumlah Outlier</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Harga</td>
+          <td>-5343.75</td>
+          <td>17606.25</td>
+          <td>94</td>
+      </tr>
+      <tr>
+          <td>LB</td>
+          <td>-150.0</td>
+          <td>650.0</td>
+          <td>53</td>
+      </tr>
+      <tr>
+          <td>LT</td>
+          <td>-110.0</td>
+          <td>530.0</td>
+          <td>88</td>
+      </tr>
+      <tr>
+          <td>KT</td>
+          <td>2.5</td>
+          <td>6.5</td>
+          <td>153</td>
+      </tr>
+      <tr>
+          <td>KM</td>
+          <td>1.5</td>
+          <td>5.5</td>
+          <td>117</td>
+      </tr>
+      <tr>
+          <td>GRS</td>
+          <td>-0.5</td>
+          <td>3.5</td>
+          <td>129</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2 id="Prepocessing">Prepocessing</h2>
+<h3 id="Menghapus Outlier">Menghapus Outlier</h3>
+<div class="code-box">
+  <pre><code>
+    for kolom in ['harga', 'lb', 'lt', 'kt', 'km', 'grs']:
+    Q1 = df[kolom].quantile(0.25)
+    Q3 = df[kolom].quantile(0.75)
+    IQR = Q3 - Q1
+    batas_bawah = Q1 - 1.5 * IQR
+    batas_atas = Q3 + 1.5 * IQR
+    df = df[(df[kolom] >= batas_bawah) & (df[kolom] <= batas_atas)]
+  </code></pre>
+</div>
+
+<h3 id="Visualisasi Matriks Korelasi">Visualisasi Matriks Korelasi</h3>
+<div class="code-box">
+  <pre><code>
+    # Menghapus kolom 'tingkat_harga' dan 'daerah'
+    df_corr = df.drop(['tingkat_harga','nama_rumah'], axis=1)
+    
+    # Menghitung matriks korelasi
+    correlation_all = df_corr.corr()
+    
+    # Menampilkan matriks korelasi
+    plt.figure(figsize=(6, 4))
+    sns.heatmap(correlation_all, annot=True, cmap='rocket', fmt=".2f")
+    plt.title('Matriks Korelasi')
+    plt.show()
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    <img src="_images\matrik korelas.png" alt="explorasi data" width="lebar" height="tinggi">
+  </code></pre>
+</div>
+<p>Kesimpulan dari matriks korelasi daiatas adalah:</p>
+<ul>
+  <li>(Luas Tanah): Korelasi tertinggi dengan harga (0.81). Ini menunjukkan bahwa luas tanah adalah faktor yang paling signifikan dalam memengaruhi harga properti.</li>
+  <li>(Luas Bangunan): Korelasi tinggi dengan harga (0.75), artinya luas bangunan juga merupakan faktor penting yang memengaruhi harga.</li>
+  <li>(Jumlah Garasi): Korelasi sedang dengan harga (0.48), artinya jumlah garasi memengaruhi harga, tetapi tidak sekuat luas bangunan atau tanah.</li>
+  <li>(Jumlah Kamar Mandi): Korelasi cukup rendah dengan harga (0.40), menunjukkan pengaruhnya terhadap harga tidak terlalu besar.</li>
+  <li>(Jumlah Kamar Tidur): Korelasi paling rendah dengan harga (0.32), menunjukkan bahwa jumlah kamar tidur tidak terlalu memengaruhi harga secara signifikan.</li>
+</ul>
+
+<h2 id="Pemodelan Decision Tree">Pemodelan Decision Tree</h2>
+<div class="code-box">
+  <pre><code>
+    from sklearn.tree import DecisionTreeRegressor
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+    # Memisahkan fitur dan target
+    X = df[['lb', 'lt', 'kt', 'km', 'grs']].values  # Feature
+    y = df['harga'].values  # Target
+
+    # Membagi dataset menjadi data latih 80% dan data uji 20%
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Membuat model Decision Tree dengan parameter untuk mencegah overfitting
+    model = DecisionTreeRegressor(
+        max_depth=5,               # Membatasi kedalaman pohon
+        min_samples_split=10,      # Minimum sampel untuk split cabang
+        min_samples_leaf=5,        # Minimum sampel pada setiap daun
+        random_state=42
+    )
+
+    # Melatih model
+    model.fit(X_train, y_train)
+
+  </code></pre>
+</div>
+
+<h2 id="Evaluasi">Evaluasi</h2>
+<div class="code-box">
+  <pre><code>
+    y_train_pred = model.predict(X_train)
+    y_pred = model.predict(X_test)
+    
+    # Menghitung MAE, MSE, dan R2 Score untuk data pelatihan
+    mae_train = mean_absolute_error(y_train, y_train_pred)
+    mse_train = mean_squared_error(y_train, y_train_pred)
+    r2_train = r2_score(y_train, y_train_pred)
+    
+    # Menghitung MAE, MSE, dan R2 Score untuk data pengujian
+    mae_test = mean_absolute_error(y_test, y_pred)
+    mse_test = mean_squared_error(y_test, y_pred)
+    r2_test = r2_score(y_test, y_pred)
+    
+    # Menampilkan hasil evaluasi
+    print("Evaluasi Model pada Data Pelatihan:")
+    print(f'MAE: {mae_train}')
+    print(f'MSE: {mse_train}')
+    print(f'R2 Score: {r2_train}')
+    print("\nEvaluasi Model pada Data Pengujian:")
+    print(f'MAE: {mae_test}')
+    print(f'MSE: {mse_test}')
+    print(f'R2 Score: {r2_test}')
+  </code></pre>
+</div>
+<table border="2" cellspacing="2" cellpadding="5">
+  <thead>
+      <tr>
+          <th>Metric</th>
+          <th>Data Pelatihan</th>
+          <th>Data Pengujian</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>MAE (Mean Absolute Error)</td>
+          <td>894.01</td>
+          <td>1286.90</td>
+      </tr>
+      <tr>
+          <td>MSE (Mean Squared Error)</td>
+          <td>1,632,880.22</td>
+          <td>4,234,726.41</td>
+      </tr>
+      <tr>
+          <td>R² (R-squared)</td>
+          <td>0.8099</td>
+          <td>0.4553</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2 id="Visualisasi Prediksi Model">Visualisasi Prediksi Model</h2>
+<div class="code-box">
+  <pre><code>
+    # Visualisasi regresi untuk data latih dan data uji
+    plt.figure(figsize=(10, 6))
+    
+    # Plot data latih
+    plt.scatter(y_train, y_train_pred, color='orange', label='Data Latih')
+    
+    # Plot data uji
+    plt.scatter(y_test, y_pred, color='red', label='Data Uji')
+    
+    # Plot garis identitas
+    plt.plot([min(y_train), max(y_train)], [min(y_train), max(y_train)], linestyle='--', color='gray', label='Garis Identitas')
+    
+    # Label sumbu x dan y
+    plt.xlabel('Nilai Sebenarnya')
+    plt.ylabel('Nilai Prediksi')
+    
+    # Judul plot
+    plt.title('Prediksi Model Decision Tree')
+    
+    # Menambahkan legenda
+    plt.legend()
+    
+    # Menampilkan plot
+    plt.show()
+    
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    <img src="_images\prediksi_visualisasi.png" alt="explorasi data" width="lebar" height="tinggi"> 
+  </code></pre>
+</div>
+<h2 id="Prediksi">Prediksi</h2>
+<div class="code-box">
+  <pre><code>
+    # Definisikan fungsi untuk memprediksi harga berdasarkan fitur yang dimasukkan
+    def predict_house_price(lb, lt, kt, km, grs):
+        # Lakukan prediksi harga menggunakan model regresi linier
+        predicted_price = model.predict([[lb, lt, kt, km, grs]])
+    
+        # Tampilkan hasil prediksi
+        print("Harga rumah impian anda diperkirakan sekitar IDR {:,.3f} juta".format(predicted_price[0]))
+    
+    # Input dari pengguna
+    lb = float(input("Masukkan luas bangunan (LB) dalam m2: "))
+    lt = float(input("Masukkan luas tanah (LT) dalam m2: "))
+    kt = int(input("Masukkan jumlah kamar tidur (KT): "))
+    km = int(input("Masukkan jumlah kamar mandi (KM): "))
+    grs = int(input("Masukkan jumlah garasi (GRS): "))
+    
+    # Panggil fungsi prediksi
+    predict_house_price(lb, lt, kt, km, grs)    
+  </code></pre>
+</div>
+<ul>
+  <li>Masukkan luas bangunan (LB) dalam m2: 267</li>
+  <li>Masukkan luas tanah (LT) dalam m2: 250</li>
+  <li>Masukkan jumlah kamar tidur (KT): 3</li>
+  <li>Masukkan jumlah kamar mandi (KM): 3</li>
+  <li>Masukkan jumlah garasi (GRS): 3</li>
+  <li>Harga rumah impian anda diperkirakan sekitar IDR 6,355.444 juta</li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Tugas1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tugas 1</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Tugas3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tugas 3</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Pendahuluan">Pendahuluan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Latar Belakang">Latar Belakang</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Tujuan">Tujuan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Rumusan Masalah">Rumusan Masalah</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Data Understanding">Data Understanding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menampilkan Data">Menampilkan Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menentukan Missing Value">Menentukan Missing Value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Explorasi Data">Explorasi Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menentukan Outlier">Menentukan Outlier</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prepocessing">Prepocessing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menghapus Outlier">Menghapus Outlier</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualisasi Matriks Korelasi">Visualisasi Matriks Korelasi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Pemodelan Decision Tree">Pemodelan Decision Tree</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Evaluasi">Evaluasi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prediksi">Prediksi</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
