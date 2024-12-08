@@ -366,7 +366,7 @@
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="markdown-files">
-<h1>Prediksi Permintaan Produk di Indomaret untuk Optimisasi Stok Barang<a class="headerlink" href="#markdown-files" title="Link to this heading">#</a></h1>
+<h1>PREDIKSI PERMINTAAN PRODUK DI INDOMARET UNTUK OPTIMISASI STOK<a class="headerlink" href="#markdown-files" title="Link to this heading">#</a></h1>
 <h2 id="Pendahuluan">Pendahuluan</h2>
 <h3 id="Latar Belakang">Latar Belakang</h3>
 <p>
@@ -410,18 +410,11 @@
 <h3>Import library</h3>
 <div class="code-box">
   <pre><code>
-    import numpy as np 
-    import pandas as pd 
+    import pandas as pd
+    import numpy as np
     import matplotlib.pyplot as plt
     import seaborn as sns
-    from sklearn.model_selection import train_test_split, GridSearchCV
-    from sklearn.linear_model import Ridge
-    from sklearn.pipeline import make_pipeline
-    from sklearn.linear_model import LinearRegression
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-    import warnings
-    warnings.filterwarnings('ignore')
+    from tabulate import tabulate
   </code></pre>
 </div>
 
@@ -432,851 +425,2252 @@
     drive.mount('/content/drive')
   </code></pre>
 </div>
+<p>Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount("/content/drive", force_remount=True).</p>
 
 <h3 id="Menampilkan Data">Menampilkan Data</h3>
 <div class="code-box">
   <pre><code>
-    df = pd.read_excel('/content/drive/MyDrive/PSD/DATA RUMAH.xlsx')
-    df.head()
+    # Path ke dataset
+    dataset_path = '/content/drive/MyDrive/PSD/Dataset_indomaret_sales.csv'
+    
+    # Membaca dataset
+    df = pd.read_csv(dataset_path)
+    
+    # Tampilkan 5 baris pertama
+    print(df.head())
   </code></pre>
 </div>
 
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-      <tr>
-          <th>NO</th>
-          <th>NAMA RUMAH</th>
-          <th>HARGA</th>
-          <th>LB</th>
-          <th>LT</th>
-          <th>KT</th>
-          <th>KM</th>
-          <th>GRS</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
-          <td>3,800,000,000</td>
-          <td>220</td>
-          <td>220</td>
-          <td>3</td>
-          <td>3</td>
-          <td>0</td>
-      </tr>
-      <tr>
-          <td>2</td>
-          <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
-          <td>4,600,000,000</td>
-          <td>180</td>
-          <td>137</td>
-          <td>4</td>
-          <td>3</td>
-          <td>2</td>
-      </tr>
-      <tr>
-          <td>3</td>
-          <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
-          <td>3,000,000,000</td>
-          <td>267</td>
-          <td>250</td>
-          <td>4</td>
-          <td>4</td>
-          <td>4</td>
-      </tr>
-      <tr>
-          <td>4</td>
-          <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
-          <td>430,000,000</td>
-          <td>40</td>
-          <td>25</td>
-          <td>2</td>
-          <td>2</td>
-          <td>0</td>
-      </tr>
-      <tr>
-          <td>5</td>
-          <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
-          <td>9,000,000,000</td>
-          <td>400</td>
-          <td>355</td>
-          <td>6</td>
-          <td>5</td>
-          <td>3</td>
-      </tr>
-  </tbody>
-</table>
-
-<h3 id="Menentukan Missing Value" >Menentukan Missing Value</h3>
 <div class="code-box">
   <pre><code>
-    df = pd.read_excel('/content/drive/MyDrive/PSD/DATA RUMAH.xlsx')
+    <table border="2" cellspacing="2" cellpadding="5">
+      <thead>
+          <tr>
+              <th>Transaction ID</th>
+              <th>Date</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Units Sold</th>
+              <th>Unit Price</th>
+              <th>Total Revenue</th>
+              <th>Store Location</th>
+              <th>Payment Method</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>T0001</td>
+              <td>2024-10-06</td>
+              <td>Pepsodent Toothpaste</td>
+              <td>Personal Care</td>
+              <td>NaN</td>
+              <td>15000</td>
+              <td>675000.0</td>
+              <td>Jakarta</td>
+              <td>Cash</td>
+          </tr>
+          <tr>
+              <td>T0002</td>
+              <td>2024-10-01</td>
+              <td>ABC Kecap Manis 620ml</td>
+              <td>Groceries</td>
+              <td>60.0</td>
+              <td>18000</td>
+              <td>1080000.0</td>
+              <td>Jakarta</td>
+              <td>Card</td>
+          </tr>
+          <tr>
+              <td>T0003</td>
+              <td>2024-10-01</td>
+              <td>Lifebuoy Body Wash</td>
+              <td>Personal Care</td>
+              <td>17.0</td>
+              <td>25000</td>
+              <td>425000.0</td>
+              <td>Medan</td>
+              <td>Cash</td>
+          </tr>
+          <tr>
+              <td>T0004</td>
+              <td>2024-10-06</td>
+              <td>Milo 1kg</td>
+              <td>Drinks</td>
+              <td>95.0</td>
+              <td>90000</td>
+              <td>8550000.0</td>
+              <td>Bandung</td>
+              <td>Cash</td>
+          </tr>
+          <tr>
+              <td>T0005</td>
+              <td>2024-10-03</td>
+              <td>Indomie Goreng</td>
+              <td>Instant Noodles</td>
+              <td>30.0</td>
+              <td>3000</td>
+              <td>90000.0</td>
+              <td>Surabaya</td>
+              <td>Card</td>
+          </tr>
+      </tbody>
+  </table>
+  </code></pre>
+</div>
+
+<p>Selanjutnya, untuk mengetahui jumlah baris dan kolom yang terdapat pada dataset, berikut adalah cara menampilkan jumlah baris dan kolom</p>
+<h3 id="jumlah baris dan kolom" >jumlah baris dan kolom</h3>
+<div class="code-box">
+  <pre><code>
+    df = pd.read_csv('/content/drive/MyDrive/PSD/Dataset_indomaret_sales.csv')
+    df.shape
+  </code></pre>
+</div>
+<p><b>(4000, 9)</b></p>
+<p>Dari output diatas, dapat disimpulkan bahwa terdapat 4000 baris data dan 9 kolom</p>
+
+<h3 id="Menentukan Missing Value" >Menentukan Missing Value</h3>
+<p>Missing value adalah hilangnya beberapa data yang telah diperoleh. Menangani missing value dengan tepat sangat penting untuk memastikan integritas dan akurasi analisis data. pada dataset indomaret selanjutnya dilakukan pengecekan missing value sebagi berikut:</p>
+<div class="code-box">
+  <pre><code>
+    df = pd.read_csv('/content/drive/MyDrive/PSD/Dataset_indomaret_sales.csv')
     df.isnull().sum()
   </code></pre>
 </div>
 
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-      <tr>
-          <th>NO</th>
-          <th>NAMA RUMAH</th>
-          <th>HARGA</th>
-          <th>LB</th>
-          <th>LT</th>
-          <th>KT</th>
-          <th>KM</th>
-          <th>GRS</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-      </tr>
-  </tbody>
-</table>
-<p>
-  Kesimpulan: Dapat dilihat bahwa tidak terdapat missing values dalam dataset sehingga tidak dibutuhkan proses lebih lanjut untuk penanganan missing value.
-</p>
-
-<h3>Menampilkan info </h3>
+<p>Missing value adalah hilangnya beberapa data yang telah diperoleh. Menangani missing value dengan tepat sangat penting untuk memastikan integritas dan akurasi analisis data. pada dataset indomaret selanjutnya dilakukan pengecekan missing value sebagi berikut:</p>
 <div class="code-box">
   <pre><code>
-    df.info()
-    print("Shape of data:")
-    print(df.shape)
+    <table border="2" cellspacing="2" cellpadding="5">
+      <thead>
+          <tr>
+              <th>Kolom</th>
+              <th>Jumlah Nilai Null</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>Transaction_ID</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Date</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Product_Name</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Category</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Units_Sold</td>
+              <td>133</td>
+          </tr>
+          <tr>
+              <td>Unit_Price</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Total_Revenue</td>
+              <td>206</td>
+          </tr>
+          <tr>
+              <td>Store_Location</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Payment_Method</td>
+              <td>0</td>
+          </tr>
+      </tbody>
+  </table>
   </code></pre>
 </div>
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-    <tr>
-      <th>Kolom</th>
-      <th>Non-Null Count</th>
-      <th>Dtype</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>No</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-    <tr>
-      <td>Nama Rumah</td>
-      <td>1010</td>
-      <td>object</td>
-    </tr>
-    <tr>
-      <td>Harga</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-    <tr>
-      <td>LB (Luas Bangunan)</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-    <tr>
-      <td>LT (Luas Tanah)</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-    <tr>
-      <td>KT (Jumlah Kamar Tidur)</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-    <tr>
-      <td>KM (Jumlah Kamar Mandi)</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-    <tr>
-      <td>GRS (Jumlah Garasi)</td>
-      <td>1010</td>
-      <td>int64</td>
-    </tr>
-  </tbody>
-</table>
 
-<p><strong>Shape of Data:</strong> (1010, 8)</p>
+<p><b>Kesimpulan</b>:dapat dilihat bahwa terdapat missing value pada fitur "Unit_Sold" sebanyak 133, dan fitur "Total_Revenue" sebanyak 206</p>
 
-<h3>Rename Nama Fitur </h3>
+<h3 id="Menangani Missing Value">Menangani Missing Value</h3>
+<p>Saya menggunakan metode dropna() untuk menghapus baris yang mengandung missing value dalam dataset saya, setelah menghapus baris yang terdapat missing value, berikutnya menyimpan dataset yang sudah bersih kedalam file CSV dan mengecek kembali bahwa tidak ada lagi missing value</p>
 <div class="code-box">
   <pre><code>
-    df = df.rename(columns={
-      'NO': 'nomor',
-      'NAMA RUMAH': 'nama_rumah',
-      'HARGA': 'harga',
-      'LB': 'lb',
-      'LT': 'lt',
-      'KT': 'kt',
-      'KM': 'km',
-      'GRS': 'grs'
-  })
-  df
-  </code></pre>
-</div>
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-    <tr>
-      <th>nomor</th>
-      <th>nama_rumah</th>
-      <th>harga</th>
-      <th>lb</th>
-      <th>lt</th>
-      <th>kt</th>
-      <th>km</th>
-      <th>grs</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
-      <td>3800000000</td>
-      <td>220</td>
-      <td>220</td>
-      <td>3</td>
-      <td>3</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
-      <td>4600000000</td>
-      <td>180</td>
-      <td>137</td>
-      <td>4</td>
-      <td>3</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
-      <td>3000000000</td>
-      <td>267</td>
-      <td>250</td>
-      <td>4</td>
-      <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
-      <td>430000000</td>
-      <td>40</td>
-      <td>25</td>
-      <td>2</td>
-      <td>2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
-      <td>9000000000</td>
-      <td>400</td>
-      <td>355</td>
-      <td>6</td>
-      <td>5</td>
-      <td>3</td>
-    </tr>
-  </tbody>
-</table>
-<p><strong>1010 rows × 8 columns</strong></p>
-
-<h3>Mengganti satuan harga agar lebih readable</h3>
-<div class="code-box">
-  <pre><code>
-    df['harga'] = (df['harga']/1000000).astype(int)
-    df.drop(columns=['nomor'], inplace=True)
-    df.head()
-  </code></pre>
-</div>
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-    <tr>
-      <th>nama_Rumah</th>
-      <th>harga</th>
-      <th>lb</th>
-      <th>lt</th>
-      <th>kt</th>
-      <th>km</th>
-      <th>grs</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
-      <td>3800</td>
-      <td>220</td>
-      <td>220</td>
-      <td>3</td>
-      <td>3</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
-      <td>4600</td>
-      <td>180</td>
-      <td>137</td>
-      <td>4</td>
-      <td>3</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
-      <td>3000</td>
-      <td>267</td>
-      <td>250</td>
-      <td>4</td>
-      <td>4</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
-      <td>430</td>
-      <td>40</td>
-      <td>25</td>
-      <td>2</td>
-      <td>2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
-      <td>9000</td>
-      <td>400</td>
-      <td>355</td>
-      <td>6</td>
-      <td>5</td>
-      <td>3</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3>Mengklasifikasikan harga rumah menjadi tiga kategori</h3>
-<div class="code-box">
-  <pre><code>
-    q1 = df['harga'].quantile(0.25)
-    median = df['harga'].median()
-    q3 = df['harga'].quantile(0.75)
+    # Mengonversi kolom 'Unit_Price' menjadi numerik, mengganti nilai yang tidak valid menjadi NaN
+    df['Unit_Price'] = pd.to_numeric(df['Unit_Price'], errors='coerce')
     
-    def classification_harga(harga):
-        if harga <= q1:
-            return 'Murah'
-        elif harga <= median:
-            return 'Menengah'
-        else:
-            return 'Mahal'
+    # Menghapus baris yang mengandung missing value di kolom apapun, termasuk kolom 'Unit_Price'
+    df_cleaned = df.dropna()
     
-    # Menambahkan kolom baru 'Klasifikasi Harga'
-    df['tingkat_harga'] = df['harga'].apply(classification_harga)
+    # Menampilkan jumlah baris sebelum dan setelah penghapusan
+    print(f"Dataset awal: {len(df)} baris")
+    print(f"Dataset setelah penghapusan: {len(df_cleaned)} baris")
     
-    # Menampilkan DataFrame dengan kolom baru
-    df.head()
+    # Menyimpan dataset yang sudah dibersihkan ke file CSV
+    cleaned_path = '/content/drive/MyDrive/PSD/Dataset_indomaret_sales_cleaned.csv'
+    df_cleaned.to_csv(cleaned_path, index=False)
+    print(f"Dataset yang sudah dibersihkan disimpan di: {cleaned_path}")
+    
+    # Menampilkan jumlah missing value di setiap kolom setelah pembersihan
+    print(df_cleaned.isnull().sum())
   </code></pre>
 </div>
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-    <tr>
-      <th>nama_Rumah</th>
-      <th>harga</th>
-      <th>lb</th>
-      <th>lt</th>
-      <th>kt</th>
-      <th>km</th>
-      <th>grs</th>
-      <th>Tingkat Harga</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Rumah Murah Hook Tebet Timur, Tebet, Jakarta Selatan</td>
-      <td>3800</td>
-      <td>220</td>
-      <td>220</td>
-      <td>3</td>
-      <td>3</td>
-      <td>0</td>
-      <td>Menengah</td>
-    </tr>
-    <tr>
-      <td>Rumah Modern di Tebet dekat Stasiun, Tebet, Jakarta Selatan</td>
-      <td>4600</td>
-      <td>180</td>
-      <td>137</td>
-      <td>4</td>
-      <td>3</td>
-      <td>2</td>
-      <td>Menengah</td>
-    </tr>
-    <tr>
-      <td>Rumah Mewah 2 Lantai Hanya 3 Menit Ke Tebet, Tebet, Jakarta Selatan</td>
-      <td>3000</td>
-      <td>267</td>
-      <td>250</td>
-      <td>4</td>
-      <td>4</td>
-      <td>4</td>
-      <td>Murah</td>
-    </tr>
-    <tr>
-      <td>Rumah Baru Tebet, Tebet, Jakarta Selatan</td>
-      <td>430</td>
-      <td>40</td>
-      <td>25</td>
-      <td>2</td>
-      <td>2</td>
-      <td>0</td>
-      <td>Murah</td>
-    </tr>
-    <tr>
-      <td>Rumah Bagus Tebet komp Gudang Peluru lt 350m, Tebet, Jakarta Selatan</td>
-      <td>9000</td>
-      <td>400</td>
-      <td>355</td>
-      <td>6</td>
-      <td>5</td>
-      <td>3</td>
-      <td>Mahal</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3>Distribusi dan variabilitas data</h3>
-<div class="code-box">
-  <pre><code>
-    df['harga'] = (df['harga']/1000000).astype(int)
-    df.drop(columns=['nomor'], inplace=True)
-    df.head()
-  </code></pre>
-</div>
-<table border="1">
-  <thead>
-    <tr>
-      <th>nama_Rumah</th>
-      <th>harga</th>
-      <th>lb</th>
-      <th>lt</th>
-      <th>kt</th>
-      <th>km</th>
-      <th>grs</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Count</td>
-      <td>1010</td>
-      <td>1010</td>
-      <td>1010</td>
-      <td>1010</td>
-      <td>1010</td>
-      <td>1010</td>
-    </tr>
-    <tr>
-      <td>Mean</td>
-      <td>7628.98</td>
-      <td>276.54</td>
-      <td>237.43</td>
-      <td>4.67</td>
-      <td>3.61</td>
-      <td>1.92</td>
-    </tr>
-    <tr>
-      <td>Std (Standard Deviation)</td>
-      <td>7340.95</td>
-      <td>177.86</td>
-      <td>179.96</td>
-      <td>1.57</td>
-      <td>1.42</td>
-      <td>1.51</td>
-    </tr>
-    <tr>
-      <td>Min</td>
-      <td>430</td>
-      <td>40</td>
-      <td>25</td>
-      <td>2</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>25%</td>
-      <td>3262.5</td>
-      <td>150</td>
-      <td>130</td>
-      <td>4</td>
-      <td>3</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>50% (Median)</td>
-      <td>5000</td>
-      <td>216.5</td>
-      <td>165</td>
-      <td>4</td>
-      <td>3</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>75%</td>
-      <td>9000</td>
-      <td>350</td>
-      <td>290</td>
-      <td>5</td>
-      <td>4</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>Max</td>
-      <td>65000</td>
-      <td>1126</td>
-      <td>1400</td>
-      <td>10</td>
-      <td>10</td>
-      <td>10</td>
-    </tr>
-  </tbody>
-</table>
-<p>
-  Dari fungsi .describe() diatas, kita dapat melihat beberapa statistik penting tentang kolom harga:
-</p>
 <ul>
-  <li><b>Harga Terendah</b>: 430 juta</li>
-  <li><b>Quartil 25% (Q1)</b>: 3.2 miliar</li>
-  <li><b>Median </b>:5 miliar</li>
-  <li><b>Quartil 75% (Q3)</b>: 9 miliar</li>
-  <li><b>Harga Termahal </b>:65 miliar</li>
+  <li>Dataset awal: 4000 baris</li>
+  <li>Dataset setelah penghapusan: 3558 baris</li>
+  <li>Dataset yang sudah dibersihkan disimpan di: /content/drive/MyDrive/PSD/Dataset_indomaret_sales_cleaned.csv</li>
 </ul>
-<p>Selain itu, semua kolom atau data yang digunakan, kecuali kolom nama_rumah, memiliki korelasi yang positf dengan harga.</p>
 
-<h3 id="Explorasi Data">Explorasi Data</h3>
 <div class="code-box">
   <pre><code>
+    <table border="2" cellspacing="2" cellpadding="5">
+      <thead>
+          <tr>
+              <th>Kolom</th>
+              <th>Jumlah Nilai Null</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>Transaction_ID</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Date</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Product_Name</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Category</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Units_Sold</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Unit_Price</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Total_Revenue</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Store_Location</td>
+              <td>0</td>
+          </tr>
+          <tr>
+              <td>Payment_Method</td>
+              <td>0</td>
+          </tr>
+      </tbody>
+  </table>
+  </code></pre>
+</div>
+
+<p><b>Kesimpulan</b>: Dataset yang semula 4000 baris menjadi 3558 baris, sekarang data sudah bersih dari missing value</p>
+
+<h3 id="Explorasi Data (Numeric)">Explorasi Data (Numeric)</h3>
+<div class="code-box">
+  <pre><code>
+    df = pd.read_csv('/content/drive/MyDrive/PSD/Dataset_indomaret_sales_cleaned.csv')
+    df.describe()
+  </code></pre>
+</div>
+
+<div class="code-box">
+  <pre><code>
+    <table border="2" cellspacing="2" cellpadding="5">
+      <thead>
+          <tr>
+              <th>Statistik</th>
+              <th>Units_Sold</th>
+              <th>Unit_Price</th>
+              <th>Total_Revenue</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>Count</td>
+              <td>3558</td>
+              <td>3558</td>
+              <td>3558</td>
+          </tr>
+          <tr>
+              <td>Mean</td>
+              <td>54.98</td>
+              <td>21,513.15</td>
+              <td>1,178,051</td>
+          </tr>
+          <tr>
+              <td>Std</td>
+              <td>26.11</td>
+              <td>22,049.88</td>
+              <td>1,457,805</td>
+          </tr>
+          <tr>
+              <td>Min</td>
+              <td>10</td>
+              <td>2,800</td>
+              <td>30,000</td>
+          </tr>
+          <tr>
+              <td>25%</td>
+              <td>33</td>
+              <td>7,000</td>
+              <td>292,125</td>
+          </tr>
+          <tr>
+              <td>50%</td>
+              <td>55</td>
+              <td>12,000</td>
+              <td>664,500</td>
+          </tr>
+          <tr>
+              <td>75%</td>
+              <td>77</td>
+              <td>30,000</td>
+              <td>1,395,000</td>
+          </tr>
+          <tr>
+              <td>Max</td>
+              <td>100</td>
+              <td>90,000</td>
+              <td>9,000,000</td>
+          </tr>
+      </tbody>
+  </table>
+  </code></pre>
+</div>
+
+<p><b>Kesimpulan</b>:</p>
+<ol>
+  <li>Unit_Sold (jumlah Unit terjual)</li>
+  <ul>
+    <li>Rata-rata (mean): 54.98 unit terjual per transaksi.</li>
+    <li>Nilai minimal (min): 10 unit, yang menunjukkan ada transaksi dengan penjualan yang sangat sedikit.</li>
+    <li>Nilai maksimal (max): 100 unit, menunjukkan ada transaksi dengan penjualan terbesar 100 unit.</li>
+    <li>Standar deviasi (std): 26.11 unit, menunjukkan adanya variasi yang cukup besar dalam jumlah unit yang terjual</li>
+    <li>25% (Q1): 33 unit terjual, menunjukkan bahwa 25% transaksi memiliki penjualan kurang dari 33 unit.</li>
+    <li>50% (Q2, median): 55 unit terjual, menunjukkan bahwa 50% transaksi memiliki penjualan kurang dari atau sama dengan 55 unit.</li>
+    <li>75% (Q3): 77 unit terjual, menunjukkan bahwa 75% transaksi memiliki penjualan kurang dari atau sama dengan 77 unit.</li>
+  </ul>
+  <li>Unit_Price (Harga Per Unit)</li>
+  <ul>
+    <li>Rata-rata (mean): 21,513.15, yang merupakan harga rata-rata per unit produk yang dijual.</li>
+    <li>Nilai minimal (min): 2,800, yang menunjukkan harga termurah untuk sebuah produk adalah 2,800.</li>
+    <li>Nilai maksimal (max): 90,000, yang menunjukkan harga termahal untuk sebuah produk adalah 90,000.</li>
+    <li>Standar deviasi (std): 22,049.88, menunjukkan variasi harga yang sangat besar antar produk.
+      25% (Q1): 7,000, menunjukkan bahwa 25% produk memiliki harga per unit kurang dari 7,000.
+    </li>
+    <li>50% (Q2, median): 12,000, menunjukkan bahwa 50% produk memiliki harga per unit kurang dari atau sama dengan 12,000.</li>
+    <li>75% (Q3): 30,000, menunjukkan bahwa 75% produk memiliki harga per unit kurang dari atau sama dengan 30,000.</li>
+  </ul>
+  <li>Total_Revenue (Pendapatan Total)</li>
+  <ul>
+    <li>Rata-rata (mean): 1,178,051.00, yang menunjukkan rata-rata pendapatan total per transaksi.</li>
+    <li>Nilai minimal (min): 30,000, menunjukkan ada transaksi dengan pendapatan total yang sangat rendah.</li>
+    <li>Nilai maksimal (max): 9,000,000, yang menunjukkan ada transaksi dengan pendapatan total yang sangat tinggi.</li>
+    <li>Standar deviasi (std): 1,457,805, yang menunjukkan variasi yang besar dalam pendapatan total antar transaksi.</li>
+    <li>25% (Q1): 292,125, menunjukkan bahwa 25% transaksi memiliki pendapatan total kurang dari 292,125.</li>
+    <li>50% (Q2, median): 664,500, menunjukkan bahwa 50% transaksi memiliki pendapatan total kurang dari atau sama dengan 664,500.</li>
+    <li>75% (Q3): 1,395,000, menunjukkan bahwa 75% transaksi memiliki pendapatan total kurang dari atau sama dengan 1,395,000.</li>
+  </ul>
+</ol>
+
+<h3 id="Distribusi Data">Distribusi Data</h3>
+<div class="code-box">
+  <pre><code>
+    # Menentukan ukuran plot
     plt.figure(figsize=(12, 8))
+    
+    # Menampilkan distribusi Jumlah Unit yang Terjual
     plt.subplot(2, 3, 1)
-    sns.histplot(df['harga'], kde=True)
-    plt.title('Distribusi Harga')
+    sns.histplot(df['Units_Sold'], kde=True)
+    plt.title('Distribusi Units Sold')
     
+    # Menampilkan distribusi Harga per Unit
     plt.subplot(2, 3, 2)
-    sns.histplot(df['lb'], kde=True)
-    plt.title('Distribusi Luas Bangunan')
+    sns.histplot(df['Unit_Price'], kde=True)
+    plt.title('Distribusi Unit Price')
     
+    # Menampilkan distribusi Total Pendapatan
     plt.subplot(2, 3, 3)
-    sns.histplot(df['lt'], kde=True)
-    plt.title('Distribusi Luas Tanah')
+    sns.histplot(df['Total_Revenue'], kde=True)
+    plt.title('Distribusi Total Revenue')
     
+    # Menampilkan distribusi Kategori Produk (sebagai kategori diskrit)
     plt.subplot(2, 3, 4)
-    sns.histplot(df['kt'], kde=True)
-    plt.title('Distribusi Jumlah Kamar Tidur')
+    sns.countplot(x='Category', data=df)
+    plt.title('Distribusi Kategori Produk')
     
+    # Menampilkan distribusi Metode Pembayaran (sebagai kategori diskrit)
     plt.subplot(2, 3, 5)
-    sns.histplot(df['km'], kde=True)
-    plt.title('Distribusi Jumlah Kamar Mandi')
+    sns.countplot(x='Payment_Method', data=df)
+    plt.title('Distribusi Payment Method')
     
+    # Menampilkan distribusi Lokasi Toko (sebagai kategori diskrit)
     plt.subplot(2, 3, 6)
-    sns.histplot(df['grs'], kde=True)
-    plt.title('Distribusi Jumlah Garasi')
-    plt.show()
+    sns.countplot(x='Store_Location', data=df)
+    plt.title('Distribusi Store Location')
+    
+    # Menampilkan plot
+    plt.tight_layout()
+    plt.show()    
   </code></pre>
 </div>
 <div class="code-box">
   <pre><code>
-    <img src="_images\explorasi data.png" alt="explorasi data" width="lebar" height="tinggi">
+    <img src="_images\distribusi_data_tugas2.png" alt="explorasi data" width="lebar" height="tinggi">
   </code></pre>
 </div>
-<p>Berdasarkan grafik distribusi diatas dapat kita tarik kesimpulan sebagai berikut:</p>
-<ul>
-  <li>Distribusi Harga,Harga memiliki distribusi skewed ke kanan, menunjukkan mayoritas properti memiliki harga yang rendah, sementara hanya sedikit properti yang memiliki harga sangat tinggi.</li>
-  <li>Distribusi Luas Bangunan, Distribusi Luas bangunan juga skewed ke kanan, artinya sebagian besar properti memiliki luas bangunan kecil hingga sedang.Properti dengan luas bangunan besar relatif lebih sedikit.</li>
-  <li>Distribusi Luas Tanah, mayoritas properti memiliki luas tanah yang kecil hingga sedang.Properti dengan luas tanah sangat besar lebih jarang ditemukan.</li>
-  <li>Distribusi Jumlah Kamar Tidur, Mayoritas properti memiliki jumlah kamar tidur antara 3 hingga 5 kamar, dengan puncaknya di sekitar 4 kamar.Ada beberapa properti dengan jumlah kamar yang jauh lebih banyak (hingga 10), tetapi ini sangat jarang.</li>
-  <li>Distribusi Jumlah Kamar Mandi, Properti dengan 2 hingga 4 kamar mandi mendominasi, dengan puncaknya di sekitar 3 kamar mandi.</li>
-  <li>Distribusi Jumlah Garasi, Sebagian besar properti memiliki 1 hingga 3 garasi, dengan puncak distribusi di 2 garasi.</li>
-</ul>
-<p><b>Kesimpulan umum</b>:Mayoritas variabel menunjukkan distribusi yang skewed ke kanan,Sebagian besar properti memiliki karakteristik yang umum, seperti harga yang relatif rendah, ukuran bangunan dan tanah kecil hingga sedang, serta jumlah kamar tidur, kamar mandi, dan garasi yang sedang.</p>
 
 <h3 id="Menentukan Outlier">Menentukan Outlier</h3>
 <div class="code-box">
   <pre><code>
-    # Memilih kolom numerik
-    kolom_numerik = ['harga', 'lb', 'lt', 'kt', 'km', 'grs']
+    # Menghitung Q1 (25%) dan Q3 (75%) untuk kolom yang dipilih
+    Q1_unit_price = df_cleaned['Unit_Price'].quantile(0.25)
+    Q3_unit_price = df_cleaned['Unit_Price'].quantile(0.75)
+    IQR_unit_price = Q3_unit_price - Q1_unit_price
     
-    # Inisialisasi dataframe untuk menyimpan outlier
-    outlier_dict = {}
+    Q1_units_sold = df_cleaned['Units_Sold'].quantile(0.25)
+    Q3_units_sold = df_cleaned['Units_Sold'].quantile(0.75)
+    IQR_units_sold = Q3_units_sold - Q1_units_sold
     
-    # Perhitungan IQR untuk setiap kolom numerik
-    for kolom in kolom_numerik:
-        Q1 = df[kolom].quantile(0.25)  # Kuartil pertama (25%)
-        Q3 = df[kolom].quantile(0.75)  # Kuartil ketiga (75%)
-        IQR = Q3 - Q1  # Rentang antar-kuartil
+    Q1_total_revenue = df_cleaned['Total_Revenue'].quantile(0.25)
+    Q3_total_revenue = df_cleaned['Total_Revenue'].quantile(0.75)
+    IQR_total_revenue = Q3_total_revenue - Q1_total_revenue
     
-        # Rentang normal
-        batas_bawah = Q1 - 1.5 * IQR
-        batas_atas = Q3 + 1.5 * IQR
+    # Menetapkan batas bawah dan batas atas untuk masing-masing kolom
+    lower_bound_unit_price = Q1_unit_price - 1.5 * IQR_unit_price
+    upper_bound_unit_price = Q3_unit_price + 1.5 * IQR_unit_price
     
-        # Identifikasi outlier
-        outliers = df[(df[kolom] < batas_bawah) | (df[kolom] > batas_atas)]
+    lower_bound_units_sold = Q1_units_sold - 1.5 * IQR_units_sold
+    upper_bound_units_sold = Q3_units_sold + 1.5 * IQR_units_sold
     
-        # Menyimpan informasi outlier
-        outlier_dict[kolom] = outliers
+    lower_bound_total_revenue = Q1_total_revenue - 1.5 * IQR_total_revenue
+    upper_bound_total_revenue = Q3_total_revenue + 1.5 * IQR_total_revenue
     
-        print(f"Kolom: {kolom}")
-        print(f"Batas bawah: {batas_bawah}, Batas atas: {batas_atas}")
-        print(f"Jumlah outlier: {len(outliers)}\n")
+    # Menandai outlier
+    outliers_unit_price = df_cleaned[(df_cleaned['Unit_Price'] < lower_bound_unit_price) | (df_cleaned['Unit_Price'] > upper_bound_unit_price)]
+    outliers_units_sold = df_cleaned[(df_cleaned['Units_Sold'] < lower_bound_units_sold) | (df_cleaned['Units_Sold'] > upper_bound_units_sold)]
+    outliers_total_revenue = df_cleaned[(df_cleaned['Total_Revenue'] < lower_bound_total_revenue) | (df_cleaned['Total_Revenue'] > upper_bound_total_revenue)]
     
+    # Menampilkan hasil
+    print(f"Outliers untuk 'Unit_Price': {outliers_unit_price.shape[0]} baris")
+    print(f"Outliers untuk 'Units_Sold': {outliers_units_sold.shape[0]} baris")
+    print(f"Outliers untuk 'Total_Revenue': {outliers_total_revenue.shape[0]} baris")
+    
+    # Menampilkan contoh outliers
+    print("\nContoh Outliers 'Unit_Price':")
+    print(outliers_unit_price.head())
+    
+    print("\nContoh Outliers 'Units_Sold':")
+    print(outliers_units_sold.head())
+    
+    print("\nContoh Outliers 'Total_Revenue':")
+    print(outliers_total_revenue.head())    
   </code></pre>
 </div>
-
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-      <tr>
-          <th>Kolom</th>
-          <th>Batas Bawah</th>
-          <th>Batas Atas</th>
-          <th>Jumlah Outlier</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Harga</td>
-          <td>-5343.75</td>
-          <td>17606.25</td>
-          <td>94</td>
-      </tr>
-      <tr>
-          <td>LB</td>
-          <td>-150.0</td>
-          <td>650.0</td>
-          <td>53</td>
-      </tr>
-      <tr>
-          <td>LT</td>
-          <td>-110.0</td>
-          <td>530.0</td>
-          <td>88</td>
-      </tr>
-      <tr>
-          <td>KT</td>
-          <td>2.5</td>
-          <td>6.5</td>
-          <td>153</td>
-      </tr>
-      <tr>
-          <td>KM</td>
-          <td>1.5</td>
-          <td>5.5</td>
-          <td>117</td>
-      </tr>
-      <tr>
-          <td>GRS</td>
-          <td>-0.5</td>
-          <td>3.5</td>
-          <td>129</td>
-      </tr>
-  </tbody>
-</table>
-
-<h2 id="Prepocessing">Prepocessing</h2>
-<h3 id="Menghapus Outlier">Menghapus Outlier</h3>
-<div class="code-box">
-  <pre><code>
-    for kolom in ['harga', 'lb', 'lt', 'kt', 'km', 'grs']:
-    Q1 = df[kolom].quantile(0.25)
-    Q3 = df[kolom].quantile(0.75)
-    IQR = Q3 - Q1
-    batas_bawah = Q1 - 1.5 * IQR
-    batas_atas = Q3 + 1.5 * IQR
-    df = df[(df[kolom] >= batas_bawah) & (df[kolom] <= batas_atas)]
-  </code></pre>
-</div>
-
-<h3 id="Visualisasi Matriks Korelasi">Visualisasi Matriks Korelasi</h3>
-<div class="code-box">
-  <pre><code>
-    # Menghapus kolom 'tingkat_harga' dan 'daerah'
-    df_corr = df.drop(['tingkat_harga','nama_rumah'], axis=1)
-    
-    # Menghitung matriks korelasi
-    correlation_all = df_corr.corr()
-    
-    # Menampilkan matriks korelasi
-    plt.figure(figsize=(6, 4))
-    sns.heatmap(correlation_all, annot=True, cmap='rocket', fmt=".2f")
-    plt.title('Matriks Korelasi')
-    plt.show()
-  </code></pre>
-</div>
-<div class="code-box">
-  <pre><code>
-    <img src="_images\matrik korelas.png" alt="explorasi data" width="lebar" height="tinggi">
-  </code></pre>
-</div>
-<p>Kesimpulan dari matriks korelasi daiatas adalah:</p>
 <ul>
-  <li>(Luas Tanah): Korelasi tertinggi dengan harga (0.81). Ini menunjukkan bahwa luas tanah adalah faktor yang paling signifikan dalam memengaruhi harga properti.</li>
-  <li>(Luas Bangunan): Korelasi tinggi dengan harga (0.75), artinya luas bangunan juga merupakan faktor penting yang memengaruhi harga.</li>
-  <li>(Jumlah Garasi): Korelasi sedang dengan harga (0.48), artinya jumlah garasi memengaruhi harga, tetapi tidak sekuat luas bangunan atau tanah.</li>
-  <li>(Jumlah Kamar Mandi): Korelasi cukup rendah dengan harga (0.40), menunjukkan pengaruhnya terhadap harga tidak terlalu besar.</li>
-  <li>(Jumlah Kamar Tidur): Korelasi paling rendah dengan harga (0.32), menunjukkan bahwa jumlah kamar tidur tidak terlalu memengaruhi harga secara signifikan.</li>
+  <li>Outliers untuk 'Unit_Price': 351 baris</li>
+  <li>Outliers untuk 'Units_Sold': 0 baris</li>
+  <li>Outliers untuk 'Total_Revenue': 317 baris</li>
 </ul>
 
-<h2 id="Pemodelan Decision Tree">Pemodelan Decision Tree</h2>
+<h2>Prepocessing</h2>
+<h3 id="Menghapus Outlier">Menghapus Outlier</h3>
+<p>Menghapus outlier bertujuan untuk meningkatkan kualitas analisis dan model prediksi, karena outlier dapat menyebabkan bias atau hasil yang tidak akurat dan mengurangi pengaruh data ekstrem, yang dapat mendistorsi hasil statistik atau performa model</p>
 <div class="code-box">
   <pre><code>
-    from sklearn.tree import DecisionTreeRegressor
-    from sklearn.model_selection import train_test_split
-    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+    # Menghapus baris outlier untuk 'Unit_Price' dan 'Total_Revenue'
+    df_cleaned_no_outliers = df_cleaned[
+        (df_cleaned['Unit_Price'] >= lower_bound_unit_price) &
+        (df_cleaned['Unit_Price'] <= upper_bound_unit_price) &
+        (df_cleaned['Total_Revenue'] >= lower_bound_total_revenue) &
+        (df_cleaned['Total_Revenue'] <= upper_bound_total_revenue)
+    ]
+    
+    print(f"Dataset sebelum penghapusan outlier: {len(df_cleaned)} baris")
+    # Menampilkan informasi dataset setelah penghapusan outlier
+    print(f"Dataset setelah penghapusan outlier: {len(df_cleaned_no_outliers)} baris")
+    
+    # Menyimpan dataset yang sudah dibersihkan ke file CSV
+    cleaned_no_outliers_path = '/content/drive/MyDrive/PSD/Dataset_indomaret_sales_no_outliers.csv'
+    df_cleaned_no_outliers.to_csv(cleaned_no_outliers_path, index=False)
+    print(f"Dataset tanpa outlier disimpan di: {cleaned_no_outliers_path}")    
+  </code></pre>
+</div>
+<ul>
+  <li>Dataset sebelum penghapusan outlier: 3558 baris</li>
+  <li>Dataset setelah penghapusan outlier: 3131 baris</li>
+  <li>Dataset tanpa outlier disimpan di: /content/drive/MyDrive/PSD/Dataset_indomaret_sales_no_outliers.csv</li>
+</ul>
 
-    # Memisahkan fitur dan target
-    X = df[['lb', 'lt', 'kt', 'km', 'grs']].values  # Feature
-    y = df['harga'].values  # Target
+<h3 id="Normalisasi Data">Normalisasi Data</h3>
+<p>Normalization adalah proses mengubah nilai-nilai dalam dataset sehingga mereka memiliki skala yang seragam. Min-max normalization adalah salah satu teknik normalization yang umum digunakan. Dalam min-max normalization, nilai-nilai dalam dataset diubah sedemikian rupa sehingga mereka berada dalam rentang tertentu, biasanya 0 hingga 1.</p>
+<div class="code-box">
+  <pre><code>
+    from sklearn.preprocessing import MinMaxScaler
 
-    # Membagi dataset menjadi data latih 80% dan data uji 20%
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Membuat model Decision Tree dengan parameter untuk mencegah overfitting
-    model = DecisionTreeRegressor(
-        max_depth=5,               # Membatasi kedalaman pohon
-        min_samples_split=10,      # Minimum sampel untuk split cabang
-        min_samples_leaf=5,        # Minimum sampel pada setiap daun
-        random_state=42
-    )
-
-    # Melatih model
-    model.fit(X_train, y_train)
-
+    # Kolom yang ingin dinormalisasi
+    columns_to_normalize = ['Unit_Price', 'Units_Sold', 'Total_Revenue']
+    
+    # Inisialisasi scaler
+    scaler = MinMaxScaler()
+    
+    # Normalisasi kolom
+    df_cleaned[columns_to_normalize] = scaler.fit_transform(df_cleaned[columns_to_normalize])
+    
+    # Menampilkan hasil
+    print(df_cleaned.head())
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    <table border="2" cellspacing="2" cellpadding="5">
+      <thead>
+          <tr>
+              <th>Transaction_ID</th>
+              <th>Date</th>
+              <th>Product_Name</th>
+              <th>Category</th>
+              <th>Units_Sold</th>
+              <th>Unit_Price</th>
+              <th>Total_Revenue</th>
+              <th>Store_Location</th>
+              <th>Payment_Method</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>T0002</td>
+              <td>2024-10-01</td>
+              <td>ABC Kecap Manis 620ml</td>
+              <td>Groceries</td>
+              <td>0.555556</td>
+              <td>0.174312</td>
+              <td>0.117057</td>
+              <td>Jakarta</td>
+              <td>Card</td>
+          </tr>
+          <tr>
+              <td>T0003</td>
+              <td>2024-10-01</td>
+              <td>Lifebuoy Body Wash</td>
+              <td>Personal Care</td>
+              <td>0.077778</td>
+              <td>0.254587</td>
+              <td>0.044036</td>
+              <td>Medan</td>
+              <td>Cash</td>
+          </tr>
+          <tr>
+              <td>T0004</td>
+              <td>2024-10-06</td>
+              <td>Milo 1kg</td>
+              <td>Drinks</td>
+              <td>0.944444</td>
+              <td>1.000000</td>
+              <td>0.949833</td>
+              <td>Bandung</td>
+              <td>Cash</td>
+          </tr>
+          <tr>
+              <td>T0005</td>
+              <td>2024-10-03</td>
+              <td>Indomie Goreng</td>
+              <td>Instant Noodles</td>
+              <td>0.222222</td>
+              <td>0.002294</td>
+              <td>0.006689</td>
+              <td>Surabaya</td>
+              <td>Card</td>
+          </tr>
+          <tr>
+              <td>T0006</td>
+              <td>2024-10-02</td>
+              <td>Sari Roti Tawar</td>
+              <td>Snacks</td>
+              <td>0.166667</td>
+              <td>0.105505</td>
+              <td>0.030100</td>
+              <td>Jakarta</td>
+              <td>Card</td>
+          </tr>
+      </tbody>
+  </table>
   </code></pre>
 </div>
 
-<h2 id="Evaluasi">Evaluasi</h2>
+
+<h2>Pemodelan</h2>
+<h3 id="Sliding Window">Sliding Window</h3>
 <div class="code-box">
   <pre><code>
-    y_train_pred = model.predict(X_train)
+    from sklearn.model_selection import train_test_split
+
+    # Misalkan df_cleaned_no_outliers adalah dataset Anda yang sudah dibersihkan dari outlier
+    window_size = 7  # Ukuran jendela 7 hari
+    
+    # Mengurutkan data berdasarkan tanggal untuk memastikan urutan yang benar
+    df_cleaned_no_outliers['Date'] = pd.to_datetime(df_cleaned_no_outliers['Date'])
+    df_cleaned_no_outliers = df_cleaned_no_outliers.sort_values(by='Date')
+    
+    # Membuat fitur lag untuk 7 hari sebelumnya
+    for i in range(1, window_size+1):
+        df_cleaned_no_outliers[f'Units_Sold_Lag_{i}'] = df_cleaned_no_outliers['Units_Sold'].shift(i)
+    
+    # Menghapus nilai NaN yang dihasilkan dari shifting
+    df_cleaned_no_outliers = df_cleaned_no_outliers.dropna()
+    
+    # Menentukan fitur (X) dan target (y)
+    X = df_cleaned_no_outliers[['Unit_Price', 'Total_Revenue'] + [f'Units_Sold_Lag_{i}' for i in range(1, window_size+1)]]
+    y = df_cleaned_no_outliers['Units_Sold']
+    
+    # Membagi data menjadi data training dan testing
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Melihat bentuk data
+    print(f'X_train shape: {X_train.shape}')
+    print(f'X_test shape: {X_test.shape}')
+    print(f'y_train shape: {y_train.shape}')
+    print(f'y_test shape: {y_test.shape}')
+    
+  </code></pre>
+</div>
+
+<p><b>output:</b></p>
+<div class="code-box">
+  <pre><code>
+    X_train shape: (2499, 9)
+    X_test shape: (625, 9)
+    y_train shape: (2499,)
+    y_test shape: (625,)
+    <ipython-input-35-4fabed799a7b>:7: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame.
+    Try using .loc[row_indexer,col_indexer] = value instead
+    
+    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+    df_cleaned_no_outliers['Date'] = pd.to_datetime(df_cleaned_no_outliers['Date'])
+  </code></pre>
+</div>
+
+<h3 id="Regresi Linear">Regresi Linear</h3>
+<div class="code-box">
+  <pre><code>
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error, r2_score
+    # Membuat dan melatih model regresi linier
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    
+    # Melakukan prediksi pada data pengujian
     y_pred = model.predict(X_test)
     
-    # Menghitung MAE, MSE, dan R2 Score untuk data pelatihan
-    mae_train = mean_absolute_error(y_train, y_train_pred)
-    mse_train = mean_squared_error(y_train, y_train_pred)
-    r2_train = r2_score(y_train, y_train_pred)
+    # Menghitung RMSE (Root Mean Squared Error)
+    rmse = mean_squared_error(y_test, y_pred, squared=False)
     
-    # Menghitung MAE, MSE, dan R2 Score untuk data pengujian
-    mae_test = mean_absolute_error(y_test, y_pred)
-    mse_test = mean_squared_error(y_test, y_pred)
-    r2_test = r2_score(y_test, y_pred)
+    # Menghitung R-squared (koefisien determinasi)
+    r_squared = r2_score(y_test, y_pred)
+    
+    # Menghitung MAPE (Mean Absolute Percentage Error)
+    mape = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
     
     # Menampilkan hasil evaluasi
-    print("Evaluasi Model pada Data Pelatihan:")
-    print(f'MAE: {mae_train}')
-    print(f'MSE: {mse_train}')
-    print(f'R2 Score: {r2_train}')
-    print("\nEvaluasi Model pada Data Pengujian:")
-    print(f'MAE: {mae_test}')
-    print(f'MSE: {mse_test}')
-    print(f'R2 Score: {r2_test}')
+    print(f"RMSE: {rmse}")
+    print(f"R-squared: {r_squared}")
+    print(f"MAPE: {mape}%")
   </code></pre>
 </div>
-<table border="2" cellspacing="2" cellpadding="5">
-  <thead>
-      <tr>
-          <th>Metric</th>
-          <th>Data Pelatihan</th>
-          <th>Data Pengujian</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>MAE (Mean Absolute Error)</td>
-          <td>894.01</td>
-          <td>1286.90</td>
-      </tr>
-      <tr>
-          <td>MSE (Mean Squared Error)</td>
-          <td>1,632,880.22</td>
-          <td>4,234,726.41</td>
-      </tr>
-      <tr>
-          <td>R² (R-squared)</td>
-          <td>0.8099</td>
-          <td>0.4553</td>
-      </tr>
-  </tbody>
-</table>
+<p><b>Output:</b></p>
+<div class="code-box">
+  <pre><code>
+    RMSE: 15.528759560829336
+    R-squared: 0.6406357879465867
+    MAPE: 38.58801408285631%
+    /usr/local/lib/python3.10/dist-packages/sklearn/metrics/_regression.py:492: FutureWarning: 'squared' is deprecated in version 1.4 and will be removed in 1.6. To calculate the root mean squared error, use the function'root_mean_squared_error'.
+      warnings.warn(
+        Actual: 66.00, Predicted: 87.20
+        Actual: 49.00, Predicted: 51.40
+        Actual: 48.00, Predicted: 51.88
+        Actual: 73.00, Predicted: 74.86
+        Actual: 77.00, Predicted: 63.15
+        Actual: 77.00, Predicted: 68.86
+        Actual: 46.00, Predicted: 49.09
+        Actual: 19.00, Predicted: 31.68
+        Actual: 84.00, Predicted: 58.21
+        Actual: 23.00, Predicted: 10.08
+        Actual: 20.00, Predicted: 37.08
+        Actual: 100.00, Predicted: 100.72
+        Actual: 30.00, Predicted: 38.76
+        Actual: 36.00, Predicted: 41.28
+        Actual: 29.00, Predicted: 43.96
+        Actual: 37.00, Predicted: 49.74
+        Actual: 70.00, Predicted: 57.54
+        Actual: 55.00, Predicted: 54.35
+        Actual: 51.00, Predicted: 53.82
+        Actual: 42.00, Predicted: 51.43
+        Actual: 67.00, Predicted: 78.21
+        Actual: 93.00, Predicted: 113.69
+        Actual: 41.00, Predicted: 50.41
+        Actual: 88.00, Predicted: 57.68
+        Actual: 81.00, Predicted: 60.82
+        Actual: 30.00, Predicted: 37.85
+        Actual: 48.00, Predicted: 52.41
+        Actual: 31.00, Predicted: 41.15
+        Actual: 17.00, Predicted: 42.02
+        Actual: 61.00, Predicted: 57.58
+        Actual: 69.00, Predicted: 60.20
+        Actual: 81.00, Predicted: 60.47
+        Actual: 48.00, Predicted: 47.45
+        Actual: 43.00, Predicted: 49.44
+        Actual: 63.00, Predicted: 68.40
+        Actual: 64.00, Predicted: 62.21
+        Actual: 88.00, Predicted: 77.87
+        Actual: 36.00, Predicted: 33.09
+        Actual: 91.00, Predicted: 86.79
+        Actual: 64.00, Predicted: 59.73
+        Actual: 60.00, Predicted: 56.71
+        Actual: 77.00, Predicted: 55.87
+        Actual: 46.00, Predicted: 50.85
+        Actual: 58.00, Predicted: 55.29
+        Actual: 33.00, Predicted: 38.41
+        Actual: 39.00, Predicted: 50.16
+        Actual: 22.00, Predicted: 44.98
+        Actual: 84.00, Predicted: 63.56
+        Actual: 55.00, Predicted: 64.19
+        Actual: 91.00, Predicted: 58.25
+        Actual: 92.00, Predicted: 112.45
+        Actual: 94.00, Predicted: 104.42
+        Actual: 23.00, Predicted: 41.45
+        Actual: 49.00, Predicted: 53.96
+        Actual: 73.00, Predicted: 60.60
+        Actual: 38.00, Predicted: 43.54
+        Actual: 13.00, Predicted: 48.23
+        Actual: 63.00, Predicted: 59.10
+        Actual: 19.00, Predicted: 42.04
+        Actual: 69.00, Predicted: 57.30
+        Actual: 18.00, Predicted: 23.75
+        Actual: 99.00, Predicted: 59.91
+        Actual: 25.00, Predicted: 31.50
+        Actual: 32.00, Predicted: 41.70
+        Actual: 20.00, Predicted: 48.91
+        Actual: 76.00, Predicted: 63.26
+        Actual: 96.00, Predicted: 64.43
+        Actual: 58.00, Predicted: 65.73
+        Actual: 58.00, Predicted: 58.07
+        Actual: 65.00, Predicted: 70.34
+        Actual: 11.00, Predicted: 29.93
+        Actual: 22.00, Predicted: 48.10
+        Actual: 53.00, Predicted: 53.81
+        Actual: 43.00, Predicted: 50.62
+        Actual: 62.00, Predicted: 56.71
+        Actual: 88.00, Predicted: 59.63
+        Actual: 84.00, Predicted: 59.75
+        Actual: 39.00, Predicted: 29.53
+        Actual: 31.00, Predicted: 49.89
+        Actual: 27.00, Predicted: 48.08
+        Actual: 24.00, Predicted: 48.44
+        Actual: 22.00, Predicted: 42.74
+        Actual: 86.00, Predicted: 73.34
+        Actual: 10.00, Predicted: 35.77
+        Actual: 15.00, Predicted: 9.93
+        Actual: 12.00, Predicted: 8.12
+        Actual: 76.00, Predicted: 57.71
+        Actual: 10.00, Predicted: -8.84
+        Actual: 33.00, Predicted: 48.22
+        Actual: 55.00, Predicted: 55.94
+        Actual: 31.00, Predicted: 44.81
+        Actual: 82.00, Predicted: 58.34
+        Actual: 61.00, Predicted: 63.36
+        Actual: 58.00, Predicted: 63.36
+        Actual: 77.00, Predicted: 62.33
+        Actual: 62.00, Predicted: 64.13
+        Actual: 79.00, Predicted: 74.03
+        Actual: 77.00, Predicted: 77.44
+        Actual: 23.00, Predicted: 49.59
+        Actual: 31.00, Predicted: 35.81
+        Actual: 76.00, Predicted: 66.88
+        Actual: 52.00, Predicted: 54.94
+        Actual: 68.00, Predicted: 70.52
+        Actual: 40.00, Predicted: 47.05
+        Actual: 89.00, Predicted: 99.02
+        Actual: 97.00, Predicted: 63.92
+        Actual: 35.00, Predicted: 47.85
+  </code></pre>
+</div>
 
-<h2 id="Visualisasi Prediksi Model">Visualisasi Prediksi Model</h2>
+<h3 id="Visualisasi Prediksi vs Aktual Regresi Linear">Visualisasi Prediksi vs Aktual Regresi Linear</h3>
 <div class="code-box">
   <pre><code>
-    # Visualisasi regresi untuk data latih dan data uji
-    plt.figure(figsize=(10, 6))
-    
-    # Plot data latih
-    plt.scatter(y_train, y_train_pred, color='orange', label='Data Latih')
-    
-    # Plot data uji
-    plt.scatter(y_test, y_pred, color='red', label='Data Uji')
-    
-    # Plot garis identitas
-    plt.plot([min(y_train), max(y_train)], [min(y_train), max(y_train)], linestyle='--', color='gray', label='Garis Identitas')
-    
-    # Label sumbu x dan y
-    plt.xlabel('Nilai Sebenarnya')
-    plt.ylabel('Nilai Prediksi')
-    
-    # Judul plot
-    plt.title('Prediksi Model Decision Tree')
-    
-    # Menambahkan legenda
+    plt.figure(figsize=(10,6))
+    plt.scatter(y_test, y_pred, color='blue', label='Prediksi')
+    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', label='Garisan Prediksi Sempurna')
+    plt.xlabel('Aktual (Units Sold)')
+    plt.ylabel('Prediksi (Units Sold)')
+    plt.title('Prediksi vs Aktual Regresi Linear')
     plt.legend()
-    
-    # Menampilkan plot
     plt.show()
-    
   </code></pre>
 </div>
 <div class="code-box">
   <pre><code>
-    <img src="_images\prediksi_visualisasi.png" alt="explorasi data" width="lebar" height="tinggi"> 
+    <img src="_images\prediksi vs aktual_regresilinear.png" alt="explorasi data" width="lebar" height="tinggi">
   </code></pre>
 </div>
-<h2 id="Prediksi">Prediksi</h2>
+
+
+<h2 id="Random Forest">Random Forest</h2>
 <div class="code-box">
   <pre><code>
-    # Definisikan fungsi untuk memprediksi harga berdasarkan fitur yang dimasukkan
-    def predict_house_price(lb, lt, kt, km, grs):
-        # Lakukan prediksi harga menggunakan model regresi linier
-        predicted_price = model.predict([[lb, lt, kt, km, grs]])
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.metrics import mean_squared_error, r2_score
+    import numpy as np
     
-        # Tampilkan hasil prediksi
-        print("Harga rumah impian anda diperkirakan sekitar IDR {:,.3f} juta".format(predicted_price[0]))
+    # Menentukan model Random Forest
+    model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
     
-    # Input dari pengguna
-    lb = float(input("Masukkan luas bangunan (LB) dalam m2: "))
-    lt = float(input("Masukkan luas tanah (LT) dalam m2: "))
-    kt = int(input("Masukkan jumlah kamar tidur (KT): "))
-    km = int(input("Masukkan jumlah kamar mandi (KM): "))
-    grs = int(input("Masukkan jumlah garasi (GRS): "))
+    # Melatih model menggunakan data training
+    model_rf.fit(X_train, y_train)
     
-    # Panggil fungsi prediksi
-    predict_house_price(lb, lt, kt, km, grs)    
+    # Melakukan prediksi pada data testing
+    y_pred_rf = model_rf.predict(X_test)
+    
+    # Menghitung RMSE (Root Mean Squared Error)
+    rmse_rf = mean_squared_error(y_test, y_pred_rf, squared=False)
+    
+    # Menghitung R-squared (koefisien determinasi)
+    r_squared_rf = r2_score(y_test, y_pred_rf)
+    
+    # Menghitung MAPE (Mean Absolute Percentage Error)
+    mape_rf = np.mean(np.abs((y_test - y_pred_rf) / y_test)) * 100
+    
+    # Menampilkan hasil evaluasi
+    print(f"RMSE (Random Forest): {rmse_rf}")
+    print(f"R-squared (Random Forest): {r_squared_rf}")
+    print(f"MAPE (Random Forest): {mape_rf}%")
+    
+    # Menampilkan nilai aktual dan prediksi dengan format yang rapi
+    for i in range(len(y_test)):
+        print(f"Actual: {y_test.iloc[i]:.2f}, Predicted: {y_pred_rf[i]:.2f}")    
   </code></pre>
 </div>
+
+<div class="code-box">
+  <pre><code>
+    /usr/local/lib/python3.10/dist-packages/sklearn/metrics/_regression.py:492: FutureWarning: 'squared' is deprecated in version 1.4 and will be removed in 1.6. To calculate the root mean squared error, use the function'root_mean_squared_error'.
+    warnings.warn(
+  RMSE (Random Forest): 0.9464270494866469
+  R-squared (Random Forest): 0.9986651404217923
+  MAPE (Random Forest): 1.6486887985164296%
+  Actual: 66.00, Predicted: 65.52
+  Actual: 49.00, Predicted: 49.15
+  Actual: 48.00, Predicted: 48.04
+  Actual: 73.00, Predicted: 72.39
+  Actual: 77.00, Predicted: 79.14
+  Actual: 77.00, Predicted: 76.92
+  Actual: 46.00, Predicted: 45.46
+  Actual: 19.00, Predicted: 18.42
+  Actual: 84.00, Predicted: 87.67
+  Actual: 23.00, Predicted: 23.13
+  Actual: 20.00, Predicted: 20.82
+  Actual: 100.00, Predicted: 96.14
+  Actual: 30.00, Predicted: 30.00
+  Actual: 36.00, Predicted: 35.12
+  Actual: 29.00, Predicted: 29.34
+  Actual: 37.00, Predicted: 37.61
+  Actual: 70.00, Predicted: 71.92
+  Actual: 55.00, Predicted: 54.80
+  Actual: 51.00, Predicted: 48.62
+  Actual: 42.00, Predicted: 39.64
+  Actual: 67.00, Predicted: 66.15
+  Actual: 93.00, Predicted: 91.35
+  Actual: 41.00, Predicted: 40.00
+  Actual: 88.00, Predicted: 88.94
+  Actual: 81.00, Predicted: 84.77
+  Actual: 30.00, Predicted: 29.66
+  Actual: 48.00, Predicted: 49.74
+  Actual: 31.00, Predicted: 30.99
+  Actual: 17.00, Predicted: 16.82
+  Actual: 61.00, Predicted: 61.74
+  Actual: 69.00, Predicted: 68.78
+  Actual: 81.00, Predicted: 82.90
+  Actual: 48.00, Predicted: 48.16
+  Actual: 43.00, Predicted: 42.45
+  Actual: 63.00, Predicted: 63.80
+  Actual: 64.00, Predicted: 64.07
+  Actual: 88.00, Predicted: 87.70
+  Actual: 36.00, Predicted: 36.14
+  Actual: 91.00, Predicted: 91.41
+  Actual: 64.00, Predicted: 64.19
+  Actual: 60.00, Predicted: 59.36
+  Actual: 77.00, Predicted: 76.54
+  Actual: 46.00, Predicted: 45.78
+  Actual: 58.00, Predicted: 58.14
+  Actual: 33.00, Predicted: 32.59
+  Actual: 39.00, Predicted: 39.57
+  Actual: 22.00, Predicted: 22.59
+  Actual: 84.00, Predicted: 83.37
+  Actual: 55.00, Predicted: 54.51
+  Actual: 91.00, Predicted: 90.34
+  Actual: 92.00, Predicted: 91.65
+  Actual: 94.00, Predicted: 93.63
+  Actual: 23.00, Predicted: 23.27
+  Actual: 49.00, Predicted: 50.42
+  Actual: 73.00, Predicted: 73.42
+  Actual: 38.00, Predicted: 37.86
+  Actual: 13.00, Predicted: 12.71
+  Actual: 63.00, Predicted: 63.03
+  Actual: 19.00, Predicted: 17.46
+  Actual: 69.00, Predicted: 70.47
+  Actual: 18.00, Predicted: 19.24
+  Actual: 99.00, Predicted: 97.83
+  Actual: 25.00, Predicted: 24.22
+  Actual: 32.00, Predicted: 32.03
+  Actual: 20.00, Predicted: 20.73
+  Actual: 76.00, Predicted: 76.01
+  Actual: 96.00, Predicted: 95.90
+  Actual: 58.00, Predicted: 58.32
+  Actual: 58.00, Predicted: 57.47
+  Actual: 65.00, Predicted: 64.61
+  Actual: 11.00, Predicted: 11.17
+  Actual: 22.00, Predicted: 21.32
+  Actual: 53.00, Predicted: 53.12
+  Actual: 43.00, Predicted: 41.65
+  Actual: 62.00, Predicted: 61.82
+  Actual: 88.00, Predicted: 87.19
+  Actual: 84.00, Predicted: 83.84
+  Actual: 39.00, Predicted: 38.97
+  Actual: 31.00, Predicted: 31.69
+  Actual: 27.00, Predicted: 26.61
+  Actual: 24.00, Predicted: 23.54
+  Actual: 22.00, Predicted: 22.01
+  Actual: 86.00, Predicted: 84.94
+  Actual: 10.00, Predicted: 11.96
+  Actual: 15.00, Predicted: 14.49
+  Actual: 12.00, Predicted: 11.98
+  Actual: 76.00, Predicted: 77.18
+  Actual: 10.00, Predicted: 11.69
+  Actual: 33.00, Predicted: 32.63
+  Actual: 55.00, Predicted: 54.83
+  Actual: 31.00, Predicted: 30.43
+  Actual: 82.00, Predicted: 82.14
+  Actual: 61.00, Predicted: 61.04
+  Actual: 58.00, Predicted: 55.67
+  Actual: 77.00, Predicted: 79.00
+  Actual: 62.00, Predicted: 61.60
+  Actual: 79.00, Predicted: 78.76
+  Actual: 77.00, Predicted: 77.06
+  Actual: 23.00, Predicted: 23.81
+  Actual: 31.00, Predicted: 30.37
+  Actual: 76.00, Predicted: 76.21
+  Actual: 52.00, Predicted: 51.98
+  Actual: 68.00, Predicted: 68.51
+  Actual: 40.00, Predicted: 39.99
+  Actual: 89.00, Predicted: 88.88
+  Actual: 97.00, Predicted: 94.58
+  Actual: 35.00, Predicted: 33.98
+  Actual: 98.00, Predicted: 97.69
+  Actual: 20.00, Predicted: 20.46
+  Actual: 99.00, Predicted: 97.09
+  Actual: 15.00, Predicted: 14.90
+  Actual: 49.00, Predicted: 48.39
+  Actual: 90.00, Predicted: 91.76
+  Actual: 51.00, Predicted: 50.67
+  Actual: 62.00, Predicted: 65.00
+  Actual: 85.00, Predicted: 84.96
+  Actual: 53.00, Predicted: 51.74
+  Actual: 35.00, Predicted: 35.91
+  Actual: 35.00, Predicted: 34.71
+  Actual: 93.00, Predicted: 93.79
+  Actual: 80.00, Predicted: 79.85
+  Actual: 46.00, Predicted: 46.58
+  Actual: 50.00, Predicted: 49.89
+  Actual: 29.00, Predicted: 29.29
+  Actual: 42.00, Predicted: 43.88
+  Actual: 47.00, Predicted: 46.98
+  Actual: 16.00, Predicted: 15.94
+  Actual: 99.00, Predicted: 97.01
+  Actual: 54.00, Predicted: 53.39
+  Actual: 51.00, Predicted: 50.50
+  Actual: 41.00, Predicted: 41.14
+  Actual: 11.00, Predicted: 12.02
+  Actual: 11.00, Predicted: 11.65
+  Actual: 61.00, Predicted: 62.35
+  Actual: 75.00, Predicted: 74.26
+  Actual: 11.00, Predicted: 12.20
+  Actual: 56.00, Predicted: 55.96
+  Actual: 19.00, Predicted: 18.25
+  Actual: 14.00, Predicted: 13.48
+  Actual: 73.00, Predicted: 72.82
+  Actual: 90.00, Predicted: 90.09
+  Actual: 74.00, Predicted: 74.99
+  Actual: 51.00, Predicted: 50.49
+  Actual: 41.00, Predicted: 40.35
+  Actual: 22.00, Predicted: 22.18
+  Actual: 40.00, Predicted: 40.20
+  Actual: 98.00, Predicted: 97.08
+  Actual: 83.00, Predicted: 82.99
+  Actual: 78.00, Predicted: 77.97
+  Actual: 84.00, Predicted: 84.29
+  Actual: 18.00, Predicted: 17.96
+  Actual: 98.00, Predicted: 97.87
+  Actual: 35.00, Predicted: 34.68
+  Actual: 54.00, Predicted: 54.68
+  Actual: 53.00, Predicted: 53.74
+  Actual: 87.00, Predicted: 87.07
+  Actual: 79.00, Predicted: 78.07
+  Actual: 95.00, Predicted: 96.76
+  Actual: 78.00, Predicted: 78.22
+  Actual: 80.00, Predicted: 82.26
+  Actual: 49.00, Predicted: 48.83
+  Actual: 22.00, Predicted: 22.22
+  Actual: 14.00, Predicted: 13.18
+  Actual: 51.00, Predicted: 51.34
+  Actual: 21.00, Predicted: 21.76
+  Actual: 48.00, Predicted: 48.36
+  Actual: 63.00, Predicted: 63.05
+  Actual: 15.00, Predicted: 15.69
+  Actual: 51.00, Predicted: 51.59
+  Actual: 82.00, Predicted: 81.80
+  Actual: 16.00, Predicted: 16.37
+  Actual: 25.00, Predicted: 25.07
+  Actual: 12.00, Predicted: 12.62
+  Actual: 86.00, Predicted: 83.83
+  Actual: 21.00, Predicted: 20.92
+  Actual: 21.00, Predicted: 21.42
+  Actual: 54.00, Predicted: 53.38
+  Actual: 56.00, Predicted: 55.64
+  Actual: 15.00, Predicted: 14.50
+  Actual: 67.00, Predicted: 67.17
+  Actual: 39.00, Predicted: 38.89
+  Actual: 50.00, Predicted: 50.53
+  Actual: 57.00, Predicted: 57.21
+  Actual: 18.00, Predicted: 17.44
+  Actual: 95.00, Predicted: 95.15
+  Actual: 81.00, Predicted: 80.78
+  Actual: 40.00, Predicted: 39.89
+  Actual: 46.00, Predicted: 44.69
+  Actual: 74.00, Predicted: 75.45
+  Actual: 47.00, Predicted: 44.86
+  Actual: 20.00, Predicted: 19.50
+  Actual: 12.00, Predicted: 12.61
+  Actual: 63.00, Predicted: 63.09
+  Actual: 29.00, Predicted: 29.30
+  Actual: 57.00, Predicted: 57.37
+  Actual: 13.00, Predicted: 13.66
+  Actual: 24.00, Predicted: 23.92
+  Actual: 54.00, Predicted: 54.17
+  Actual: 18.00, Predicted: 17.60
+  Actual: 80.00, Predicted: 80.04
+  Actual: 90.00, Predicted: 89.39
+  Actual: 13.00, Predicted: 12.86
+  Actual: 21.00, Predicted: 22.05
+  Actual: 61.00, Predicted: 61.09
+  Actual: 45.00, Predicted: 44.89
+  Actual: 22.00, Predicted: 21.82
+  Actual: 10.00, Predicted: 12.60
+  Actual: 46.00, Predicted: 46.09
+  Actual: 34.00, Predicted: 33.73
+  Actual: 18.00, Predicted: 17.84
+  Actual: 58.00, Predicted: 57.99
+  Actual: 46.00, Predicted: 46.73
+  Actual: 12.00, Predicted: 12.41
+  Actual: 13.00, Predicted: 13.31
+  Actual: 66.00, Predicted: 65.97
+  Actual: 64.00, Predicted: 63.99
+  Actual: 69.00, Predicted: 68.97
+  Actual: 63.00, Predicted: 63.05
+  Actual: 47.00, Predicted: 46.95
+  Actual: 17.00, Predicted: 16.82
+  Actual: 81.00, Predicted: 80.71
+  Actual: 85.00, Predicted: 87.93
+  Actual: 93.00, Predicted: 92.88
+  Actual: 91.00, Predicted: 90.92
+  Actual: 88.00, Predicted: 89.50
+  Actual: 83.00, Predicted: 83.63
+  Actual: 99.00, Predicted: 97.67
+  Actual: 89.00, Predicted: 89.25
+  Actual: 94.00, Predicted: 93.24
+  Actual: 93.00, Predicted: 94.00
+  Actual: 53.00, Predicted: 53.21
+  Actual: 20.00, Predicted: 19.13
+  Actual: 42.00, Predicted: 39.72
+  Actual: 18.00, Predicted: 17.95
+  Actual: 28.00, Predicted: 27.99
+  Actual: 15.00, Predicted: 14.70
+  Actual: 29.00, Predicted: 29.22
+  Actual: 72.00, Predicted: 71.43
+  Actual: 52.00, Predicted: 51.96
+  Actual: 47.00, Predicted: 46.96
+  Actual: 19.00, Predicted: 17.34
+  Actual: 41.00, Predicted: 41.33
+  Actual: 70.00, Predicted: 71.69
+  Actual: 15.00, Predicted: 14.24
+  Actual: 33.00, Predicted: 33.67
+  Actual: 76.00, Predicted: 75.93
+  Actual: 43.00, Predicted: 41.79
+  Actual: 71.00, Predicted: 71.50
+  Actual: 80.00, Predicted: 79.28
+  Actual: 32.00, Predicted: 31.92
+  Actual: 34.00, Predicted: 33.83
+  Actual: 48.00, Predicted: 48.09
+  Actual: 10.00, Predicted: 11.42
+  Actual: 23.00, Predicted: 22.09
+  Actual: 56.00, Predicted: 56.07
+  Actual: 44.00, Predicted: 44.06
+  Actual: 63.00, Predicted: 61.50
+  Actual: 37.00, Predicted: 37.03
+  Actual: 80.00, Predicted: 79.19
+  Actual: 57.00, Predicted: 56.74
+  Actual: 88.00, Predicted: 89.63
+  Actual: 88.00, Predicted: 86.30
+  Actual: 20.00, Predicted: 18.80
+  Actual: 39.00, Predicted: 39.09
+  Actual: 68.00, Predicted: 67.26
+  Actual: 44.00, Predicted: 42.78
+  Actual: 92.00, Predicted: 91.51
+  Actual: 10.00, Predicted: 10.82
+  Actual: 18.00, Predicted: 17.72
+  Actual: 30.00, Predicted: 29.82
+  Actual: 50.00, Predicted: 49.80
+  Actual: 22.00, Predicted: 21.52
+  Actual: 13.00, Predicted: 13.62
+  Actual: 47.00, Predicted: 45.31
+  Actual: 96.00, Predicted: 95.02
+  Actual: 29.00, Predicted: 29.75
+  Actual: 58.00, Predicted: 57.15
+  Actual: 63.00, Predicted: 63.28
+  Actual: 84.00, Predicted: 83.90
+  Actual: 61.00, Predicted: 60.94
+  Actual: 15.00, Predicted: 15.73
+  Actual: 98.00, Predicted: 95.98
+  Actual: 96.00, Predicted: 96.24
+  Actual: 63.00, Predicted: 61.88
+  Actual: 28.00, Predicted: 27.27
+  Actual: 90.00, Predicted: 90.65
+  Actual: 33.00, Predicted: 32.90
+  Actual: 77.00, Predicted: 77.00
+  Actual: 25.00, Predicted: 25.89
+  Actual: 64.00, Predicted: 64.09
+  Actual: 53.00, Predicted: 52.69
+  Actual: 99.00, Predicted: 98.61
+  Actual: 81.00, Predicted: 80.69
+  Actual: 74.00, Predicted: 73.94
+  Actual: 65.00, Predicted: 64.89
+  Actual: 75.00, Predicted: 75.57
+  Actual: 36.00, Predicted: 35.95
+  Actual: 21.00, Predicted: 20.98
+  Actual: 76.00, Predicted: 76.27
+  Actual: 39.00, Predicted: 39.47
+  Actual: 34.00, Predicted: 34.20
+  Actual: 72.00, Predicted: 72.11
+  Actual: 94.00, Predicted: 93.12
+  Actual: 12.00, Predicted: 12.55
+  Actual: 40.00, Predicted: 39.89
+  Actual: 42.00, Predicted: 41.81
+  Actual: 52.00, Predicted: 51.25
+  Actual: 10.00, Predicted: 11.33
+  Actual: 73.00, Predicted: 72.20
+  Actual: 36.00, Predicted: 35.55
+  Actual: 61.00, Predicted: 61.33
+  Actual: 28.00, Predicted: 27.98
+  Actual: 55.00, Predicted: 55.41
+  Actual: 100.00, Predicted: 97.39
+  Actual: 26.00, Predicted: 25.92
+  Actual: 32.00, Predicted: 31.83
+  Actual: 25.00, Predicted: 24.21
+  Actual: 51.00, Predicted: 51.73
+  Actual: 17.00, Predicted: 16.86
+  Actual: 87.00, Predicted: 87.23
+  Actual: 69.00, Predicted: 68.97
+  Actual: 71.00, Predicted: 70.87
+  Actual: 98.00, Predicted: 97.56
+  Actual: 57.00, Predicted: 58.13
+  Actual: 43.00, Predicted: 41.02
+  Actual: 90.00, Predicted: 91.08
+  Actual: 97.00, Predicted: 97.25
+  Actual: 41.00, Predicted: 40.95
+  Actual: 46.00, Predicted: 43.92
+  Actual: 26.00, Predicted: 26.66
+  Actual: 11.00, Predicted: 11.96
+  Actual: 67.00, Predicted: 66.18
+  Actual: 75.00, Predicted: 74.61
+  Actual: 18.00, Predicted: 18.99
+  Actual: 74.00, Predicted: 74.07
+  Actual: 61.00, Predicted: 61.20
+  Actual: 32.00, Predicted: 32.26
+  Actual: 10.00, Predicted: 12.23
+  Actual: 56.00, Predicted: 55.98
+  Actual: 58.00, Predicted: 57.91
+  Actual: 68.00, Predicted: 69.53
+  Actual: 63.00, Predicted: 63.84
+  Actual: 77.00, Predicted: 77.02
+  Actual: 94.00, Predicted: 93.38
+  Actual: 87.00, Predicted: 84.21
+  Actual: 74.00, Predicted: 73.95
+  Actual: 82.00, Predicted: 81.99
+  Actual: 88.00, Predicted: 87.75
+  Actual: 21.00, Predicted: 20.96
+  Actual: 86.00, Predicted: 83.74
+  Actual: 22.00, Predicted: 23.04
+  Actual: 38.00, Predicted: 37.86
+  Actual: 29.00, Predicted: 29.48
+  Actual: 60.00, Predicted: 59.69
+  Actual: 26.00, Predicted: 25.83
+  Actual: 90.00, Predicted: 90.21
+  Actual: 17.00, Predicted: 16.41
+  Actual: 33.00, Predicted: 33.05
+  Actual: 18.00, Predicted: 18.00
+  Actual: 52.00, Predicted: 50.96
+  Actual: 62.00, Predicted: 65.42
+  Actual: 12.00, Predicted: 11.37
+  Actual: 29.00, Predicted: 29.20
+  Actual: 68.00, Predicted: 68.30
+  Actual: 20.00, Predicted: 18.07
+  Actual: 11.00, Predicted: 12.34
+  Actual: 13.00, Predicted: 12.82
+  Actual: 82.00, Predicted: 82.29
+  Actual: 90.00, Predicted: 91.43
+  Actual: 50.00, Predicted: 49.12
+  Actual: 46.00, Predicted: 45.79
+  Actual: 49.00, Predicted: 49.06
+  Actual: 49.00, Predicted: 50.66
+  Actual: 38.00, Predicted: 38.47
+  Actual: 32.00, Predicted: 31.91
+  Actual: 61.00, Predicted: 60.34
+  Actual: 84.00, Predicted: 84.03
+  Actual: 52.00, Predicted: 51.66
+  Actual: 64.00, Predicted: 63.85
+  Actual: 25.00, Predicted: 25.97
+  Actual: 52.00, Predicted: 51.99
+  Actual: 33.00, Predicted: 32.50
+  Actual: 31.00, Predicted: 29.79
+  Actual: 53.00, Predicted: 52.29
+  Actual: 26.00, Predicted: 27.75
+  Actual: 48.00, Predicted: 48.51
+  Actual: 67.00, Predicted: 66.48
+  Actual: 39.00, Predicted: 39.37
+  Actual: 43.00, Predicted: 42.05
+  Actual: 29.00, Predicted: 29.15
+  Actual: 19.00, Predicted: 19.40
+  Actual: 92.00, Predicted: 92.78
+  Actual: 85.00, Predicted: 84.73
+  Actual: 12.00, Predicted: 12.41
+  Actual: 59.00, Predicted: 59.19
+  Actual: 99.00, Predicted: 98.82
+  Actual: 37.00, Predicted: 37.12
+  Actual: 77.00, Predicted: 76.00
+  Actual: 49.00, Predicted: 47.88
+  Actual: 80.00, Predicted: 79.66
+  Actual: 91.00, Predicted: 90.25
+  Actual: 100.00, Predicted: 95.87
+  Actual: 59.00, Predicted: 58.64
+  Actual: 61.00, Predicted: 60.19
+  Actual: 23.00, Predicted: 22.32
+  Actual: 64.00, Predicted: 64.39
+  Actual: 33.00, Predicted: 32.75
+  Actual: 17.00, Predicted: 16.69
+  Actual: 24.00, Predicted: 24.23
+  Actual: 56.00, Predicted: 57.01
+  Actual: 83.00, Predicted: 82.97
+  Actual: 63.00, Predicted: 62.14
+  Actual: 46.00, Predicted: 45.11
+  Actual: 59.00, Predicted: 59.26
+  Actual: 41.00, Predicted: 41.82
+  Actual: 85.00, Predicted: 87.96
+  Actual: 82.00, Predicted: 82.35
+  Actual: 63.00, Predicted: 63.03
+  Actual: 29.00, Predicted: 29.94
+  Actual: 23.00, Predicted: 23.06
+  Actual: 90.00, Predicted: 89.88
+  Actual: 62.00, Predicted: 60.76
+  Actual: 87.00, Predicted: 87.09
+  Actual: 87.00, Predicted: 87.13
+  Actual: 22.00, Predicted: 22.40
+  Actual: 72.00, Predicted: 72.06
+  Actual: 16.00, Predicted: 15.78
+  Actual: 72.00, Predicted: 71.98
+  Actual: 82.00, Predicted: 83.96
+  Actual: 77.00, Predicted: 77.06
+  Actual: 60.00, Predicted: 59.93
+  Actual: 89.00, Predicted: 90.49
+  Actual: 34.00, Predicted: 34.85
+  Actual: 88.00, Predicted: 88.10
+  Actual: 66.00, Predicted: 66.08
+  Actual: 92.00, Predicted: 91.57
+  Actual: 70.00, Predicted: 69.71
+  Actual: 74.00, Predicted: 73.97
+  Actual: 40.00, Predicted: 39.72
+  Actual: 18.00, Predicted: 17.33
+  Actual: 68.00, Predicted: 67.64
+  Actual: 64.00, Predicted: 61.16
+  Actual: 91.00, Predicted: 90.56
+  Actual: 58.00, Predicted: 57.47
+  Actual: 17.00, Predicted: 17.39
+  Actual: 30.00, Predicted: 30.05
+  Actual: 21.00, Predicted: 22.18
+  Actual: 21.00, Predicted: 20.68
+  Actual: 43.00, Predicted: 42.23
+  Actual: 52.00, Predicted: 51.98
+  Actual: 18.00, Predicted: 17.78
+  Actual: 55.00, Predicted: 54.85
+  Actual: 52.00, Predicted: 51.39
+  Actual: 83.00, Predicted: 83.58
+  Actual: 50.00, Predicted: 50.15
+  Actual: 94.00, Predicted: 93.55
+  Actual: 47.00, Predicted: 48.61
+  Actual: 58.00, Predicted: 57.76
+  Actual: 68.00, Predicted: 67.40
+  Actual: 56.00, Predicted: 55.92
+  Actual: 86.00, Predicted: 86.94
+  Actual: 51.00, Predicted: 50.81
+  Actual: 11.00, Predicted: 12.21
+  Actual: 41.00, Predicted: 40.45
+  Actual: 17.00, Predicted: 16.01
+  Actual: 67.00, Predicted: 67.27
+  Actual: 13.00, Predicted: 13.34
+  Actual: 62.00, Predicted: 62.59
+  Actual: 55.00, Predicted: 55.94
+  Actual: 41.00, Predicted: 41.61
+  Actual: 95.00, Predicted: 96.50
+  Actual: 13.00, Predicted: 13.02
+  Actual: 16.00, Predicted: 16.18
+  Actual: 95.00, Predicted: 95.63
+  Actual: 88.00, Predicted: 87.98
+  Actual: 48.00, Predicted: 47.98
+  Actual: 37.00, Predicted: 36.23
+  Actual: 56.00, Predicted: 55.99
+  Actual: 55.00, Predicted: 54.85
+  Actual: 19.00, Predicted: 17.47
+  Actual: 58.00, Predicted: 58.87
+  Actual: 41.00, Predicted: 41.02
+  Actual: 39.00, Predicted: 39.08
+  Actual: 71.00, Predicted: 72.00
+  Actual: 79.00, Predicted: 81.32
+  Actual: 69.00, Predicted: 68.88
+  Actual: 29.00, Predicted: 27.94
+  Actual: 31.00, Predicted: 31.22
+  Actual: 51.00, Predicted: 48.74
+  Actual: 38.00, Predicted: 38.84
+  Actual: 65.00, Predicted: 64.89
+  Actual: 67.00, Predicted: 66.25
+  Actual: 89.00, Predicted: 89.13
+  Actual: 95.00, Predicted: 94.70
+  Actual: 68.00, Predicted: 68.59
+  Actual: 73.00, Predicted: 73.02
+  Actual: 64.00, Predicted: 63.99
+  Actual: 41.00, Predicted: 40.89
+  Actual: 96.00, Predicted: 95.01
+  Actual: 50.00, Predicted: 49.74
+  Actual: 18.00, Predicted: 20.55
+  Actual: 70.00, Predicted: 67.40
+  Actual: 76.00, Predicted: 75.82
+  Actual: 63.00, Predicted: 62.07
+  Actual: 88.00, Predicted: 88.13
+  Actual: 71.00, Predicted: 72.05
+  Actual: 100.00, Predicted: 98.08
+  Actual: 65.00, Predicted: 64.49
+  Actual: 61.00, Predicted: 60.78
+  Actual: 67.00, Predicted: 68.40
+  Actual: 37.00, Predicted: 35.50
+  Actual: 31.00, Predicted: 30.73
+  Actual: 58.00, Predicted: 58.09
+  Actual: 58.00, Predicted: 58.48
+  Actual: 14.00, Predicted: 14.75
+  Actual: 18.00, Predicted: 18.07
+  Actual: 47.00, Predicted: 47.37
+  Actual: 36.00, Predicted: 35.86
+  Actual: 72.00, Predicted: 72.09
+  Actual: 11.00, Predicted: 11.19
+  Actual: 39.00, Predicted: 39.12
+  Actual: 83.00, Predicted: 83.52
+  Actual: 35.00, Predicted: 35.36
+  Actual: 64.00, Predicted: 64.16
+  Actual: 59.00, Predicted: 58.96
+  Actual: 47.00, Predicted: 46.92
+  Actual: 93.00, Predicted: 92.81
+  Actual: 55.00, Predicted: 54.91
+  Actual: 55.00, Predicted: 54.56
+  Actual: 88.00, Predicted: 88.15
+  Actual: 64.00, Predicted: 64.50
+  Actual: 99.00, Predicted: 96.64
+  Actual: 51.00, Predicted: 51.26
+  Actual: 62.00, Predicted: 62.16
+  Actual: 46.00, Predicted: 46.72
+  Actual: 14.00, Predicted: 13.84
+  Actual: 98.00, Predicted: 95.99
+  Actual: 99.00, Predicted: 95.50
+  Actual: 39.00, Predicted: 37.95
+  Actual: 51.00, Predicted: 51.05
+  Actual: 27.00, Predicted: 27.24
+  Actual: 96.00, Predicted: 96.36
+  Actual: 99.00, Predicted: 98.78
+  Actual: 35.00, Predicted: 34.82
+  Actual: 65.00, Predicted: 65.00
+  Actual: 61.00, Predicted: 61.02
+  Actual: 80.00, Predicted: 80.12
+  Actual: 90.00, Predicted: 90.25
+  Actual: 57.00, Predicted: 57.05
+  Actual: 58.00, Predicted: 57.44
+  Actual: 72.00, Predicted: 71.61
+  Actual: 59.00, Predicted: 59.00
+  Actual: 31.00, Predicted: 30.84
+  Actual: 64.00, Predicted: 64.29
+  Actual: 77.00, Predicted: 76.89
+  Actual: 34.00, Predicted: 33.73
+  Actual: 98.00, Predicted: 96.40
+  Actual: 41.00, Predicted: 41.54
+  Actual: 22.00, Predicted: 21.97
+  Actual: 94.00, Predicted: 93.75
+  Actual: 21.00, Predicted: 21.78
+  Actual: 58.00, Predicted: 57.22
+  Actual: 64.00, Predicted: 63.93
+  Actual: 95.00, Predicted: 95.85
+  Actual: 94.00, Predicted: 93.52
+  Actual: 32.00, Predicted: 31.74
+  Actual: 65.00, Predicted: 66.50
+  Actual: 69.00, Predicted: 68.98
+  Actual: 39.00, Predicted: 39.08
+  Actual: 11.00, Predicted: 12.13
+  Actual: 11.00, Predicted: 10.77
+  Actual: 17.00, Predicted: 16.90
+  Actual: 30.00, Predicted: 30.06
+  Actual: 10.00, Predicted: 12.22
+  Actual: 87.00, Predicted: 87.14
+  Actual: 80.00, Predicted: 85.39
+  Actual: 77.00, Predicted: 76.94
+  Actual: 79.00, Predicted: 78.85
+  Actual: 53.00, Predicted: 52.82
+  Actual: 97.00, Predicted: 96.75
+  Actual: 23.00, Predicted: 22.83
+  Actual: 79.00, Predicted: 78.81
+  Actual: 55.00, Predicted: 55.30
+  Actual: 69.00, Predicted: 69.05
+  Actual: 26.00, Predicted: 26.24
+  Actual: 88.00, Predicted: 87.74
+  Actual: 43.00, Predicted: 42.07
+  Actual: 88.00, Predicted: 87.86
+  Actual: 58.00, Predicted: 55.52
+  Actual: 48.00, Predicted: 48.20
+  Actual: 38.00, Predicted: 38.91
+  Actual: 37.00, Predicted: 36.71
+  Actual: 92.00, Predicted: 88.78
+  Actual: 37.00, Predicted: 37.69
+  Actual: 92.00, Predicted: 90.55
+  Actual: 21.00, Predicted: 21.10
+  Actual: 57.00, Predicted: 56.96
+  Actual: 22.00, Predicted: 22.01
+  Actual: 72.00, Predicted: 71.60
+  Actual: 46.00, Predicted: 46.34
+  Actual: 49.00, Predicted: 49.02
+  Actual: 70.00, Predicted: 69.55
+  Actual: 55.00, Predicted: 55.48
+  Actual: 93.00, Predicted: 94.61
+  Actual: 90.00, Predicted: 89.80
+  Actual: 60.00, Predicted: 59.72
+  Actual: 31.00, Predicted: 30.11
+  Actual: 30.00, Predicted: 29.30
+  Actual: 23.00, Predicted: 24.17
+  Actual: 72.00, Predicted: 71.85
+  Actual: 31.00, Predicted: 31.50
+  Actual: 68.00, Predicted: 66.60
+  Actual: 94.00, Predicted: 95.54
+  Actual: 77.00, Predicted: 76.91
+  Actual: 87.00, Predicted: 87.49
+  Actual: 25.00, Predicted: 25.14
+  Actual: 36.00, Predicted: 36.06
+  Actual: 57.00, Predicted: 56.93
+  Actual: 25.00, Predicted: 25.17
+  Actual: 41.00, Predicted: 40.31
+  Actual: 69.00, Predicted: 69.71
+  Actual: 38.00, Predicted: 38.25
+  Actual: 42.00, Predicted: 42.27
+  Actual: 34.00, Predicted: 34.76
+  Actual: 71.00, Predicted: 70.59
+  </code></pre>
+</div>
+
+
+<h2 id="Visualisasi Prediksi vs Aktual Random Forest">Visualisasi Prediksi vs Aktual Random Forest</h2>
+<div class="code-box">
+  <pre><code>
+    import matplotlib.pyplot as plt
+
+    # Visualisasi Prediksi vs Aktual Random Forest
+    plt.figure(figsize=(10,6))
+    plt.scatter(y_test, y_pred, color='blue', label='Prediksi')
+    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', label='Garisan Prediksi Sempurna')
+    plt.xlabel('Aktual (Units Sold)')
+    plt.ylabel('Prediksi (Units Sold)')
+    plt.title('Prediksi vs Aktual Random Forest')
+    plt.legend()
+    plt.show()
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    <img src="_images\prediksi vs aktual_rendomforest.png" alt="explorasi data" width="lebar" height="tinggi"> 
+  </code></pre>
+</div>
+
+<h2 id="Support Vector Regression">Support Vector Regression</h2>
+<div class="code-box">
+  <pre><code>
+    from sklearn.svm import SVR
+    from sklearn.metrics import mean_squared_error, r2_score
+    import numpy as np
+    
+    # Menentukan model SVR dengan kernel RBF
+    model_svr = SVR(kernel='rbf', C=1.0, epsilon=0.1)
+    
+    # Melatih model menggunakan data training
+    model_svr.fit(X_train, y_train)
+    
+    # Melakukan prediksi pada data testing
+    y_pred_svr = model_svr.predict(X_test)
+    
+    # Menghitung RMSE (Root Mean Squared Error)
+    rmse_svr = mean_squared_error(y_test, y_pred_svr, squared=False)
+    
+    # Menghitung R-squared (koefisien determinasi)
+    r_squared_svr = r2_score(y_test, y_pred_svr)
+    
+    # Menghitung MAPE (Mean Absolute Percentage Error)
+    mape_svr = np.mean(np.abs((y_test - y_pred_svr) / y_test)) * 100
+    
+    # Menampilkan hasil evaluasi
+    print(f"RMSE (SVR): {rmse_svr}")
+    print(f"R-squared (SVR): {r_squared_svr}")
+    print(f"MAPE (SVR): {mape_svr}%")
+    
+    # Menampilkan nilai aktual dan prediksi dengan format yang rapi
+    for i in range(len(y_test)):
+        print(f"Actual: {y_test.iloc[i]:.2f}, Predicted: {y_pred_svr[i]:.2f}")   
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    /usr/local/lib/python3.10/dist-packages/sklearn/metrics/_regression.py:492: FutureWarning: 'squared' is deprecated in version 1.4 and will be removed in 1.6. To calculate the root mean squared error, use the function'root_mean_squared_error'.
+    warnings.warn(
+  RMSE (SVR): 22.407101804773237
+  R-squared (SVR): 0.25177421880734496
+  MAPE (SVR): 47.43694045800564%
+  Actual: 66.00, Predicted: 82.07
+  Actual: 49.00, Predicted: 65.38
+  Actual: 48.00, Predicted: 52.31
+  Actual: 73.00, Predicted: 68.40
+  Actual: 77.00, Predicted: 52.47
+  Actual: 77.00, Predicted: 64.38
+  Actual: 46.00, Predicted: 61.77
+  Actual: 19.00, Predicted: 38.20
+  Actual: 84.00, Predicted: 36.84
+  Actual: 23.00, Predicted: 59.27
+  Actual: 20.00, Predicted: 36.13
+  Actual: 100.00, Predicted: 70.83
+  Actual: 30.00, Predicted: 46.29
+  Actual: 36.00, Predicted: 55.33
+  Actual: 29.00, Predicted: 38.52
+  Actual: 37.00, Predicted: 33.77
+  Actual: 70.00, Predicted: 41.53
+  Actual: 55.00, Predicted: 55.94
+  Actual: 51.00, Predicted: 32.02
+  Actual: 42.00, Predicted: 31.01
+  Actual: 67.00, Predicted: 70.87
+  Actual: 93.00, Predicted: 82.07
+  Actual: 41.00, Predicted: 38.43
+  Actual: 88.00, Predicted: 37.40
+  Actual: 81.00, Predicted: 44.25
+  Actual: 30.00, Predicted: 46.29
+  Actual: 48.00, Predicted: 41.98
+  Actual: 31.00, Predicted: 47.02
+  Actual: 17.00, Predicted: 31.01
+  Actual: 61.00, Predicted: 46.79
+  Actual: 69.00, Predicted: 52.85
+  Actual: 81.00, Predicted: 44.25
+  Actual: 48.00, Predicted: 72.98
+  Actual: 43.00, Predicted: 49.53
+  Actual: 63.00, Predicted: 68.32
+  Actual: 64.00, Predicted: 65.09
+  Actual: 88.00, Predicted: 68.43
+  Actual: 36.00, Predicted: 66.72
+  Actual: 91.00, Predicted: 68.46
+  Actual: 64.00, Predicted: 55.15
+  Actual: 60.00, Predicted: 44.95
+  Actual: 77.00, Predicted: 35.17
+  Actual: 46.00, Predicted: 41.24
+  Actual: 58.00, Predicted: 52.53
+  Actual: 33.00, Predicted: 53.01
+  Actual: 39.00, Predicted: 34.21
+  Actual: 22.00, Predicted: 30.68
+  Actual: 84.00, Predicted: 52.95
+  Actual: 55.00, Predicted: 78.49
+  Actual: 91.00, Predicted: 36.97
+  Actual: 92.00, Predicted: 81.91
+  Actual: 94.00, Predicted: 76.43
+  Actual: 23.00, Predicted: 34.18
+  Actual: 49.00, Predicted: 44.75
+  Actual: 73.00, Predicted: 51.09
+  Actual: 38.00, Predicted: 51.98
+  Actual: 13.00, Predicted: 28.17
+  Actual: 63.00, Predicted: 54.72
+  Actual: 19.00, Predicted: 31.56
+  Actual: 69.00, Predicted: 34.78
+  Actual: 18.00, Predicted: 41.76
+  Actual: 99.00, Predicted: 38.98
+  Actual: 25.00, Predicted: 46.23
+  Actual: 32.00, Predicted: 47.75
+  Actual: 20.00, Predicted: 28.88
+  Actual: 76.00, Predicted: 52.13
+  Actual: 96.00, Predicted: 47.93
+  Actual: 58.00, Predicted: 69.77
+  Actual: 58.00, Predicted: 63.00
+  Actual: 65.00, Predicted: 68.36
+  Actual: 11.00, Predicted: 31.45
+  Actual: 22.00, Predicted: 28.94
+  Actual: 53.00, Predicted: 60.81
+  Actual: 43.00, Predicted: 40.14
+  Actual: 62.00, Predicted: 36.63
+  Actual: 88.00, Predicted: 41.65
+  Actual: 84.00, Predicted: 40.86
+  Actual: 39.00, Predicted: 68.50
+  Actual: 31.00, Predicted: 31.25
+  Actual: 27.00, Predicted: 31.67
+  Actual: 24.00, Predicted: 30.17
+  Actual: 22.00, Predicted: 32.88
+  Actual: 86.00, Predicted: 66.40
+  Actual: 10.00, Predicted: 29.69
+  Actual: 15.00, Predicted: 42.42
+  Actual: 12.00, Predicted: 38.76
+  Actual: 76.00, Predicted: 35.73
+  Actual: 10.00, Predicted: 40.08
+  Actual: 33.00, Predicted: 32.91
+  Actual: 55.00, Predicted: 55.94
+  Actual: 31.00, Predicted: 39.49
+  Actual: 82.00, Predicted: 40.47
+  Actual: 61.00, Predicted: 68.05
+  Actual: 58.00, Predicted: 68.60
+  Actual: 77.00, Predicted: 52.47
+  Actual: 62.00, Predicted: 67.33
+  Actual: 79.00, Predicted: 67.94
+  Actual: 77.00, Predicted: 68.38
+  Actual: 23.00, Predicted: 29.20
+  Actual: 31.00, Predicted: 51.38
+  Actual: 76.00, Predicted: 64.11
+  Actual: 52.00, Predicted: 66.37
+  Actual: 68.00, Predicted: 68.40
+  Actual: 40.00, Predicted: 53.33
+  Actual: 89.00, Predicted: 74.22
+  Actual: 97.00, Predicted: 48.17
+  Actual: 35.00, Predicted: 36.45
+  Actual: 98.00, Predicted: 68.47
+  Actual: 20.00, Predicted: 36.13
+  Actual: 99.00, Predicted: 57.35
+  Actual: 15.00, Predicted: 38.84
+  Actual: 49.00, Predicted: 63.26
+  Actual: 90.00, Predicted: 56.63
+  Actual: 51.00, Predicted: 41.84
+  Actual: 62.00, Predicted: 33.85
+  Actual: 85.00, Predicted: 82.13
+  Actual: 53.00, Predicted: 42.53
+  Actual: 35.00, Predicted: 57.37
+  Actual: 35.00, Predicted: 54.57
+  Actual: 93.00, Predicted: 38.11
+  Actual: 80.00, Predicted: 68.03
+  Actual: 46.00, Predicted: 33.75
+  Actual: 50.00, Predicted: 74.53
+  Actual: 29.00, Predicted: 64.69
+  Actual: 42.00, Predicted: 31.34
+  Actual: 47.00, Predicted: 72.26
+  Actual: 16.00, Predicted: 38.30
+  Actual: 99.00, Predicted: 68.93
+  Actual: 54.00, Predicted: 68.31
+  Actual: 51.00, Predicted: 68.17
+  Actual: 41.00, Predicted: 48.38
+  Actual: 11.00, Predicted: 32.76
+  Actual: 11.00, Predicted: 31.45
+  Actual: 61.00, Predicted: 53.86
+  Actual: 75.00, Predicted: 34.91
+  Actual: 11.00, Predicted: 47.93
+  Actual: 56.00, Predicted: 69.20
+  Actual: 19.00, Predicted: 28.65
+  Actual: 14.00, Predicted: 31.80
+  Actual: 73.00, Predicted: 63.22
+  Actual: 90.00, Predicted: 67.04
+  Actual: 74.00, Predicted: 35.45
+  Actual: 51.00, Predicted: 41.84
+  Actual: 41.00, Predicted: 38.43
+  Actual: 22.00, Predicted: 55.59
+  Actual: 40.00, Predicted: 40.98
+  Actual: 98.00, Predicted: 48.41
+  Actual: 83.00, Predicted: 52.63
+  Actual: 78.00, Predicted: 67.84
+  Actual: 84.00, Predicted: 58.12
+  Actual: 18.00, Predicted: 28.67
+  Actual: 98.00, Predicted: 67.93
+  Actual: 35.00, Predicted: 54.57
+  Actual: 54.00, Predicted: 68.77
+  Actual: 53.00, Predicted: 43.83
+  Actual: 87.00, Predicted: 80.51
+  Actual: 79.00, Predicted: 76.76
+  Actual: 95.00, Predicted: 38.40
+  Actual: 78.00, Predicted: 64.65
+  Actual: 80.00, Predicted: 44.00
+  Actual: 49.00, Predicted: 58.77
+  Actual: 22.00, Predicted: 58.10
+  Actual: 14.00, Predicted: 34.72
+  Actual: 51.00, Predicted: 43.09
+  Actual: 21.00, Predicted: 44.72
+  Actual: 48.00, Predicted: 32.07
+  Actual: 63.00, Predicted: 59.57
+  Actual: 15.00, Predicted: 31.32
+  Actual: 51.00, Predicted: 43.09
+  Actual: 82.00, Predicted: 68.18
+  Actual: 16.00, Predicted: 49.71
+  Actual: 25.00, Predicted: 34.94
+  Actual: 12.00, Predicted: 30.33
+  Actual: 86.00, Predicted: 36.32
+  Actual: 21.00, Predicted: 39.65
+  Actual: 21.00, Predicted: 32.13
+  Actual: 54.00, Predicted: 68.31
+  Actual: 56.00, Predicted: 35.53
+  Actual: 15.00, Predicted: 28.87
+  Actual: 67.00, Predicted: 65.92
+  Actual: 39.00, Predicted: 47.22
+  Actual: 50.00, Predicted: 48.80
+  Actual: 57.00, Predicted: 48.08
+  Actual: 18.00, Predicted: 31.64
+  Actual: 95.00, Predicted: 76.87
+  Actual: 81.00, Predicted: 57.14
+  Actual: 40.00, Predicted: 34.43
+  Actual: 46.00, Predicted: 68.25
+  Actual: 74.00, Predicted: 35.45
+  Actual: 47.00, Predicted: 68.26
+  Actual: 20.00, Predicted: 41.80
+  Actual: 12.00, Predicted: 30.33
+  Actual: 63.00, Predicted: 59.57
+  Actual: 29.00, Predicted: 62.72
+  Actual: 57.00, Predicted: 52.08
+  Actual: 13.00, Predicted: 30.65
+  Actual: 24.00, Predicted: 38.39
+  Actual: 54.00, Predicted: 68.29
+  Actual: 18.00, Predicted: 40.04
+  Actual: 80.00, Predicted: 65.15
+  Actual: 90.00, Predicted: 63.86
+  Actual: 13.00, Predicted: 30.17
+  Actual: 21.00, Predicted: 33.44
+  Actual: 61.00, Predicted: 64.12
+  Actual: 45.00, Predicted: 50.66
+  Actual: 22.00, Predicted: 29.09
+  Actual: 10.00, Predicted: 33.36
+  Actual: 46.00, Predicted: 57.08
+  Actual: 34.00, Predicted: 53.80
+  Actual: 18.00, Predicted: 29.29
+  Actual: 58.00, Predicted: 69.77
+  Actual: 46.00, Predicted: 35.79
+  Actual: 12.00, Predicted: 34.95
+  Actual: 13.00, Predicted: 52.10
+  Actual: 66.00, Predicted: 37.39
+  Actual: 64.00, Predicted: 37.01
+  Actual: 69.00, Predicted: 52.85
+  Actual: 63.00, Predicted: 71.80
+  Actual: 47.00, Predicted: 57.66
+  Actual: 17.00, Predicted: 51.24
+  Actual: 81.00, Predicted: 68.42
+  Actual: 85.00, Predicted: 36.98
+  Actual: 93.00, Predicted: 67.44
+  Actual: 91.00, Predicted: 67.18
+  Actual: 88.00, Predicted: 68.80
+  Actual: 83.00, Predicted: 36.70
+  Actual: 99.00, Predicted: 38.98
+  Actual: 89.00, Predicted: 68.89
+  Actual: 94.00, Predicted: 47.45
+  Actual: 93.00, Predicted: 38.11
+  Actual: 53.00, Predicted: 68.28
+  Actual: 20.00, Predicted: 34.35
+  Actual: 42.00, Predicted: 31.01
+  Actual: 18.00, Predicted: 37.49
+  Actual: 28.00, Predicted: 40.72
+  Actual: 15.00, Predicted: 29.38
+  Actual: 29.00, Predicted: 41.31
+  Actual: 72.00, Predicted: 68.95
+  Actual: 52.00, Predicted: 60.33
+  Actual: 47.00, Predicted: 57.66
+  Actual: 19.00, Predicted: 31.56
+  Actual: 41.00, Predicted: 48.38
+  Actual: 70.00, Predicted: 34.91
+  Actual: 15.00, Predicted: 28.27
+  Actual: 33.00, Predicted: 55.78
+  Actual: 76.00, Predicted: 68.38
+  Actual: 43.00, Predicted: 39.10
+  Actual: 71.00, Predicted: 66.80
+  Actual: 80.00, Predicted: 40.08
+  Actual: 32.00, Predicted: 64.81
+  Actual: 34.00, Predicted: 30.15
+  Actual: 48.00, Predicted: 52.31
+  Actual: 10.00, Predicted: 40.08
+  Actual: 23.00, Predicted: 32.71
+  Actual: 56.00, Predicted: 56.42
+  Actual: 44.00, Predicted: 70.38
+  Actual: 63.00, Predicted: 33.43
+  Actual: 37.00, Predicted: 51.30
+  Actual: 80.00, Predicted: 77.29
+  Actual: 57.00, Predicted: 38.37
+  Actual: 88.00, Predicted: 37.40
+  Actual: 88.00, Predicted: 41.65
+  Actual: 20.00, Predicted: 34.35
+  Actual: 39.00, Predicted: 38.69
+  Actual: 68.00, Predicted: 61.53
+  Actual: 44.00, Predicted: 40.51
+  Actual: 92.00, Predicted: 60.52
+  Actual: 10.00, Predicted: 29.17
+  Actual: 18.00, Predicted: 37.49
+  Actual: 30.00, Predicted: 41.90
+  Actual: 50.00, Predicted: 53.39
+  Actual: 22.00, Predicted: 35.25
+  Actual: 13.00, Predicted: 52.10
+  Actual: 47.00, Predicted: 40.46
+  Actual: 96.00, Predicted: 56.52
+  Actual: 29.00, Predicted: 52.34
+  Actual: 58.00, Predicted: 66.46
+  Actual: 63.00, Predicted: 39.82
+  Actual: 84.00, Predicted: 54.77
+  Actual: 61.00, Predicted: 39.33
+  Actual: 15.00, Predicted: 28.37
+  Actual: 98.00, Predicted: 70.36
+  Actual: 96.00, Predicted: 68.69
+  Actual: 63.00, Predicted: 82.19
+  Actual: 28.00, Predicted: 31.88
+  Actual: 90.00, Predicted: 82.09
+  Actual: 33.00, Predicted: 65.37
+  Actual: 77.00, Predicted: 64.38
+  Actual: 25.00, Predicted: 38.97
+  Actual: 64.00, Predicted: 65.09
+  Actual: 53.00, Predicted: 34.98
+  Actual: 99.00, Predicted: 38.98
+  Actual: 81.00, Predicted: 68.11
+  Actual: 74.00, Predicted: 63.53
+  Actual: 65.00, Predicted: 65.38
+  Actual: 75.00, Predicted: 55.07
+  Actual: 36.00, Predicted: 45.46
+  Actual: 21.00, Predicted: 56.85
+  Actual: 76.00, Predicted: 64.11
+  Actual: 39.00, Predicted: 60.23
+  Actual: 34.00, Predicted: 67.12
+  Actual: 72.00, Predicted: 42.02
+  Actual: 94.00, Predicted: 64.77
+  Actual: 12.00, Predicted: 50.05
+  Actual: 40.00, Predicted: 53.33
+  Actual: 42.00, Predicted: 54.63
+  Actual: 52.00, Predicted: 68.24
+  Actual: 10.00, Predicted: 38.68
+  Actual: 73.00, Predicted: 68.40
+  Actual: 36.00, Predicted: 37.61
+  Actual: 61.00, Predicted: 81.77
+  Actual: 28.00, Predicted: 40.72
+  Actual: 55.00, Predicted: 44.57
+  Actual: 100.00, Predicted: 62.58
+  Actual: 26.00, Predicted: 33.61
+  Actual: 32.00, Predicted: 32.70
+  Actual: 25.00, Predicted: 36.63
+  Actual: 51.00, Predicted: 43.09
+  Actual: 17.00, Predicted: 29.74
+  Actual: 87.00, Predicted: 68.41
+  Actual: 69.00, Predicted: 68.18
+  Actual: 71.00, Predicted: 68.30
+  Actual: 98.00, Predicted: 38.83
+  Actual: 57.00, Predicted: 45.32
+  Actual: 43.00, Predicted: 40.14
+  Actual: 90.00, Predicted: 37.69
+  Actual: 97.00, Predicted: 68.47
+  Actual: 41.00, Predicted: 53.98
+  Actual: 46.00, Predicted: 31.46
+  Actual: 26.00, Predicted: 39.55
+  Actual: 11.00, Predicted: 37.57
+  Actual: 67.00, Predicted: 56.38
+  Actual: 75.00, Predicted: 51.78
+  Actual: 18.00, Predicted: 41.76
+  Actual: 74.00, Predicted: 38.91
+  Actual: 61.00, Predicted: 68.31
+  Actual: 32.00, Predicted: 31.41
+  Actual: 10.00, Predicted: 32.14
+  Actual: 56.00, Predicted: 56.42
+  Actual: 58.00, Predicted: 57.37
+  Actual: 68.00, Predicted: 74.50
+  Actual: 63.00, Predicted: 68.32
+  Actual: 77.00, Predicted: 67.73
+  Actual: 94.00, Predicted: 76.43
+  Actual: 87.00, Predicted: 36.45
+  Actual: 74.00, Predicted: 63.53
+  Actual: 82.00, Predicted: 52.32
+  Actual: 88.00, Predicted: 66.74
+  Actual: 21.00, Predicted: 39.65
+  Actual: 86.00, Predicted: 36.32
+  Actual: 22.00, Predicted: 33.81
+  Actual: 38.00, Predicted: 51.98
+  Actual: 29.00, Predicted: 58.21
+  Actual: 60.00, Predicted: 63.77
+  Actual: 26.00, Predicted: 43.33
+  Actual: 90.00, Predicted: 36.84
+  Actual: 17.00, Predicted: 34.50
+  Actual: 33.00, Predicted: 65.37
+  Actual: 18.00, Predicted: 29.93
+  Actual: 52.00, Predicted: 37.18
+  Actual: 62.00, Predicted: 33.85
+  Actual: 12.00, Predicted: 28.00
+  Actual: 29.00, Predicted: 45.55
+  Actual: 68.00, Predicted: 66.16
+  Actual: 20.00, Predicted: 28.74
+  Actual: 11.00, Predicted: 47.93
+  Actual: 13.00, Predicted: 29.94
+  Actual: 82.00, Predicted: 54.13
+  Actual: 90.00, Predicted: 46.47
+  Actual: 50.00, Predicted: 34.45
+  Actual: 46.00, Predicted: 71.58
+  Actual: 49.00, Predicted: 52.85
+  Actual: 49.00, Predicted: 68.25
+  Actual: 38.00, Predicted: 30.87
+  Actual: 32.00, Predicted: 47.75
+  Actual: 61.00, Predicted: 45.30
+  Actual: 84.00, Predicted: 54.77
+  Actual: 52.00, Predicted: 49.76
+  Actual: 64.00, Predicted: 59.98
+  Actual: 25.00, Predicted: 38.97
+  Actual: 52.00, Predicted: 60.33
+  Actual: 33.00, Predicted: 40.46
+  Actual: 31.00, Predicted: 51.38
+  Actual: 53.00, Predicted: 64.91
+  Actual: 26.00, Predicted: 67.31
+  Actual: 48.00, Predicted: 68.22
+  Actual: 67.00, Predicted: 37.57
+  Actual: 39.00, Predicted: 34.21
+  Actual: 43.00, Predicted: 60.07
+  Actual: 29.00, Predicted: 41.31
+  Actual: 19.00, Predicted: 35.58
+  Actual: 92.00, Predicted: 37.97
+  Actual: 85.00, Predicted: 72.56
+  Actual: 12.00, Predicted: 43.32
+  Actual: 59.00, Predicted: 36.08
+  Actual: 99.00, Predicted: 65.75
+  Actual: 37.00, Predicted: 64.16
+  Actual: 77.00, Predicted: 39.49
+  Actual: 49.00, Predicted: 41.15
+  Actual: 80.00, Predicted: 68.44
+  Actual: 91.00, Predicted: 55.08
+  Actual: 100.00, Predicted: 78.97
+  Actual: 59.00, Predicted: 68.33
+  Actual: 61.00, Predicted: 33.19
+  Actual: 23.00, Predicted: 30.02
+  Actual: 64.00, Predicted: 72.30
+  Actual: 33.00, Predicted: 43.68
+  Actual: 17.00, Predicted: 59.24
+  Actual: 24.00, Predicted: 33.52
+  Actual: 56.00, Predicted: 33.07
+  Actual: 83.00, Predicted: 68.24
+  Actual: 63.00, Predicted: 50.51
+  Actual: 46.00, Predicted: 46.87
+  Actual: 59.00, Predicted: 48.90
+  Actual: 41.00, Predicted: 68.19
+  Actual: 85.00, Predicted: 36.98
+  Actual: 82.00, Predicted: 65.60
+  Actual: 63.00, Predicted: 68.21
+  Actual: 29.00, Predicted: 35.18
+  Actual: 23.00, Predicted: 59.27
+  Actual: 90.00, Predicted: 68.47
+  Actual: 62.00, Predicted: 69.32
+  Actual: 87.00, Predicted: 68.41
+  Actual: 87.00, Predicted: 59.06
+  Actual: 22.00, Predicted: 45.71
+  Actual: 72.00, Predicted: 66.99
+  Actual: 16.00, Predicted: 28.47
+  Actual: 72.00, Predicted: 62.90
+  Actual: 82.00, Predicted: 57.48
+  Actual: 77.00, Predicted: 67.73
+  Actual: 60.00, Predicted: 49.31
+  Actual: 89.00, Predicted: 59.66
+  Actual: 34.00, Predicted: 56.59
+  Actual: 88.00, Predicted: 68.42
+  Actual: 66.00, Predicted: 33.80
+  Actual: 92.00, Predicted: 68.48
+  Actual: 70.00, Predicted: 68.24
+  Actual: 74.00, Predicted: 49.72
+  Actual: 40.00, Predicted: 47.80
+  Actual: 18.00, Predicted: 31.64
+  Actual: 68.00, Predicted: 68.52
+  Actual: 64.00, Predicted: 33.56
+  Actual: 91.00, Predicted: 64.10
+  Actual: 58.00, Predicted: 63.00
+  Actual: 17.00, Predicted: 29.74
+  Actual: 30.00, Predicted: 32.29
+  Actual: 21.00, Predicted: 32.56
+  Actual: 21.00, Predicted: 49.72
+  Actual: 43.00, Predicted: 66.75
+  Actual: 52.00, Predicted: 54.43
+  Actual: 18.00, Predicted: 29.93
+  Actual: 55.00, Predicted: 55.94
+  Actual: 52.00, Predicted: 68.24
+  Actual: 83.00, Predicted: 54.45
+  Actual: 50.00, Predicted: 65.74
+  Actual: 94.00, Predicted: 68.49
+  Actual: 47.00, Predicted: 41.61
+  Actual: 58.00, Predicted: 52.53
+  Actual: 68.00, Predicted: 34.04
+  Actual: 56.00, Predicted: 56.42
+  Actual: 86.00, Predicted: 45.48
+  Actual: 51.00, Predicted: 49.28
+  Actual: 11.00, Predicted: 29.62
+  Actual: 41.00, Predicted: 66.05
+  Actual: 17.00, Predicted: 29.15
+  Actual: 67.00, Predicted: 68.01
+  Actual: 13.00, Predicted: 32.43
+  Actual: 62.00, Predicted: 47.16
+  Actual: 55.00, Predicted: 32.94
+  Actual: 41.00, Predicted: 68.19
+  Actual: 95.00, Predicted: 38.40
+  Actual: 13.00, Predicted: 29.94
+  Actual: 16.00, Predicted: 29.56
+  Actual: 95.00, Predicted: 38.40
+  Actual: 88.00, Predicted: 68.42
+  Actual: 48.00, Predicted: 52.31
+  Actual: 37.00, Predicted: 32.22
+  Actual: 56.00, Predicted: 56.42
+  Actual: 55.00, Predicted: 55.94
+  Actual: 19.00, Predicted: 31.56
+  Actual: 58.00, Predicted: 33.33
+  Actual: 41.00, Predicted: 32.89
+  Actual: 39.00, Predicted: 30.99
+  Actual: 71.00, Predicted: 66.80
+  Actual: 79.00, Predicted: 53.14
+  Actual: 69.00, Predicted: 66.39
+  Actual: 29.00, Predicted: 29.64
+  Actual: 31.00, Predicted: 65.87
+  Actual: 51.00, Predicted: 32.02
+  Actual: 38.00, Predicted: 40.15
+  Actual: 65.00, Predicted: 33.68
+  Actual: 67.00, Predicted: 70.87
+  Actual: 89.00, Predicted: 66.90
+  Actual: 95.00, Predicted: 69.75
+  Actual: 68.00, Predicted: 41.04
+  Actual: 73.00, Predicted: 51.09
+  Actual: 64.00, Predicted: 50.91
+  Actual: 41.00, Predicted: 34.66
+  Actual: 96.00, Predicted: 67.75
+  Actual: 50.00, Predicted: 53.39
+  Actual: 18.00, Predicted: 32.36
+  Actual: 70.00, Predicted: 34.29
+  Actual: 76.00, Predicted: 39.30
+  Actual: 63.00, Predicted: 45.99
+  Actual: 88.00, Predicted: 63.36
+  Actual: 71.00, Predicted: 41.78
+  Actual: 100.00, Predicted: 62.58
+  Actual: 65.00, Predicted: 60.38
+  Actual: 61.00, Predicted: 64.12
+  Actual: 67.00, Predicted: 68.38
+  Actual: 37.00, Predicted: 30.47
+  Actual: 31.00, Predicted: 39.49
+  Actual: 58.00, Predicted: 38.61
+  Actual: 58.00, Predicted: 33.33
+  Actual: 14.00, Predicted: 46.55
+  Actual: 18.00, Predicted: 29.93
+  Actual: 47.00, Predicted: 64.58
+  Actual: 36.00, Predicted: 33.56
+  Actual: 72.00, Predicted: 62.90
+  Actual: 11.00, Predicted: 29.42
+  Actual: 39.00, Predicted: 52.66
+  Actual: 83.00, Predicted: 36.70
+  Actual: 35.00, Predicted: 30.52
+  Actual: 64.00, Predicted: 72.30
+  Actual: 59.00, Predicted: 57.83
+  Actual: 47.00, Predicted: 47.35
+  Actual: 93.00, Predicted: 37.24
+  Actual: 55.00, Predicted: 68.34
+  Actual: 55.00, Predicted: 37.89
+  Actual: 88.00, Predicted: 80.86
+  Actual: 64.00, Predicted: 55.15
+  Actual: 99.00, Predicted: 82.10
+  Actual: 51.00, Predicted: 34.63
+  Actual: 62.00, Predicted: 54.30
+  Actual: 46.00, Predicted: 64.14
+  Actual: 14.00, Predicted: 32.94
+  Actual: 98.00, Predicted: 82.21
+  Actual: 99.00, Predicted: 48.66
+  Actual: 39.00, Predicted: 43.42
+  Actual: 51.00, Predicted: 53.91
+  Actual: 27.00, Predicted: 60.99
+  Actual: 96.00, Predicted: 38.54
+  Actual: 99.00, Predicted: 68.46
+  Actual: 35.00, Predicted: 41.44
+  Actual: 65.00, Predicted: 65.38
+  Actual: 61.00, Predicted: 68.31
+  Actual: 80.00, Predicted: 56.81
+  Actual: 90.00, Predicted: 59.95
+  Actual: 57.00, Predicted: 62.60
+  Actual: 58.00, Predicted: 66.46
+  Actual: 72.00, Predicted: 68.41
+  Actual: 59.00, Predicted: 63.39
+  Actual: 31.00, Predicted: 42.49
+  Actual: 64.00, Predicted: 68.34
+  Actual: 77.00, Predicted: 64.38
+  Actual: 34.00, Predicted: 36.12
+  Actual: 98.00, Predicted: 78.16
+  Actual: 41.00, Predicted: 68.19
+  Actual: 22.00, Predicted: 40.38
+  Actual: 94.00, Predicted: 47.45
+  Actual: 21.00, Predicted: 64.21
+  Actual: 58.00, Predicted: 66.46
+  Actual: 64.00, Predicted: 46.33
+  Actual: 95.00, Predicted: 69.75
+  Actual: 94.00, Predicted: 68.49
+  Actual: 32.00, Predicted: 47.75
+  Actual: 65.00, Predicted: 72.82
+  Actual: 69.00, Predicted: 52.85
+  Actual: 39.00, Predicted: 52.66
+  Actual: 11.00, Predicted: 30.01
+  Actual: 11.00, Predicted: 29.42
+  Actual: 17.00, Predicted: 29.74
+  Actual: 30.00, Predicted: 63.48
+  Actual: 10.00, Predicted: 34.20
+  Actual: 87.00, Predicted: 82.28
+  Actual: 80.00, Predicted: 44.00
+  Actual: 77.00, Predicted: 64.38
+  Actual: 79.00, Predicted: 64.90
+  Actual: 53.00, Predicted: 68.26
+  Actual: 97.00, Predicted: 65.38
+  Actual: 23.00, Predicted: 41.11
+  Actual: 79.00, Predicted: 70.49
+  Actual: 55.00, Predicted: 44.57
+  Actual: 69.00, Predicted: 49.68
+  Actual: 26.00, Predicted: 29.52
+  Actual: 88.00, Predicted: 80.86
+  Actual: 43.00, Predicted: 39.10
+  Actual: 88.00, Predicted: 68.43
+  Actual: 58.00, Predicted: 68.60
+  Actual: 48.00, Predicted: 32.07
+  Actual: 38.00, Predicted: 40.15
+  Actual: 37.00, Predicted: 46.05
+  Actual: 92.00, Predicted: 42.44
+  Actual: 37.00, Predicted: 33.77
+  Actual: 92.00, Predicted: 55.37
+  Actual: 21.00, Predicted: 36.69
+  Actual: 57.00, Predicted: 62.60
+  Actual: 22.00, Predicted: 29.09
+  Actual: 72.00, Predicted: 38.53
+  Actual: 46.00, Predicted: 33.75
+  Actual: 49.00, Predicted: 65.38
+  Actual: 70.00, Predicted: 66.60
+  Actual: 55.00, Predicted: 44.57
+  Actual: 93.00, Predicted: 69.41
+  Actual: 90.00, Predicted: 68.47
+  Actual: 60.00, Predicted: 63.77
+  Actual: 31.00, Predicted: 29.84
+  Actual: 30.00, Predicted: 34.85
+  Actual: 23.00, Predicted: 29.20
+  Actual: 72.00, Predicted: 68.41
+  Actual: 31.00, Predicted: 31.25
+  Actual: 68.00, Predicted: 34.04
+  Actual: 94.00, Predicted: 38.26
+  Actual: 77.00, Predicted: 64.38
+  Actual: 87.00, Predicted: 68.41
+  Actual: 25.00, Predicted: 59.01
+  Actual: 36.00, Predicted: 68.10
+  Actual: 57.00, Predicted: 68.34
+  Actual: 25.00, Predicted: 59.01
+  Actual: 41.00, Predicted: 34.66
+  Actual: 69.00, Predicted: 49.68
+  Actual: 38.00, Predicted: 46.63
+  Actual: 42.00, Predicted: 62.08
+  Actual: 34.00, Predicted: 31.73
+  Actual: 71.00, Predicted: 62.57  
+  </code></pre>
+</div>
+<h2 id="Visualisasi Prediksi vs Aktual SVR">Visualisasi Prediksi vs Aktual SVR</h2>
+<div class="code-box">
+  <pre><code>
+    import matplotlib.pyplot as plt
+
+    # Visualisasi Prediksi vs Aktual SVR
+    plt.figure(figsize=(10,6))
+    plt.scatter(y_test, y_pred, color='blue', label='Prediksi')
+    plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', label='Garisan Prediksi Sempurna')
+    plt.xlabel('Aktual (Units Sold)')
+    plt.ylabel('Prediksi (Units Sold)')
+    plt.title('Prediksi vs Aktual Random SVR')
+    plt.legend()
+    plt.show() 
+  </code></pre>
+</div>
+
+<div class="code-box">
+  <pre><code>
+    <img src="_images\prediksi vs aktual_svr.png" alt="explorasi data" width="lebar" height="tinggi">    
+  </code></pre>
+</div>
+
+<h1 id="Evaluasi">Evaluasi</h1>
+<div class="code-box">
+  <pre><code>
+    import pandas as pd
+
+    # Membuat data model dan hasil evaluasi
+    data = {
+        'Model': ['Linear Regression', 'Random Forest', 'SVR'],
+        'RMSE': [15.53, 0.95, 22.41],
+        'R-squared': [0.6406, 0.9987, 0.251],
+        'MAPE': ['38.59%', '1.65%', '47.44%']
+    }
+    
+    # Membuat DataFrame
+    df = pd.DataFrame(data)
+    
+    # Menampilkan tabel
+    df
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    <table border="2" cellspacing="2" cellpadding="5">
+      <thead>
+          <tr>
+              <th>Model</th>
+              <th>RMSE</th>
+              <th>R-squared</th>
+              <th>MAPE</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>Linear Regression</td>
+              <td>15.53</td>
+              <td>0.6406</td>
+              <td>38.59%</td>
+          </tr>
+          <tr>
+              <td>Random Forest</td>
+              <td>0.95</td>
+              <td>0.9987</td>
+              <td>1.65%</td>
+          </tr>
+          <tr>
+              <td>SVR</td>
+              <td>22.41</td>
+              <td>0.2510</td>
+              <td>47.44%</td>
+          </tr>
+      </tbody>
+  </table>
+  </code></pre>
+</div>
+<h1 id="Kesimpulan">Kesimpulan</h1>
 <ul>
-  <li>Masukkan luas bangunan (LB) dalam m2: 267</li>
-  <li>Masukkan luas tanah (LT) dalam m2: 250</li>
-  <li>Masukkan jumlah kamar tidur (KT): 3</li>
-  <li>Masukkan jumlah kamar mandi (KM): 3</li>
-  <li>Masukkan jumlah garasi (GRS): 3</li>
-  <li>Harga rumah impian anda diperkirakan sekitar IDR 6,355.444 juta</li>
+  <li>Random Forest jelas memiliki performa terbaik di antara ketiga model dengan RMSE yang sangat rendah (0.95), R-squared yang sangat tinggi (0.9987), dan MAPE yang sangat kecil (1.65%). Ini menunjukkan bahwa model ini mampu memberikan prediksi yang sangat akurat dan dapat diandalkan.</li>
+  <li>Linear Regression memiliki performa yang lebih buruk dibandingkan Random Forest, dengan RMSE yang jauh lebih tinggi dan MAPE yang cukup besar. Meskipun R-squared lebih tinggi dari SVR, hasilnya masih jauh di bawah Random Forest.</li>
+  <li>SVR memiliki performa yang paling buruk dengan R-squared yang sangat rendah, RMSE yang tinggi, dan MAPE yang juga sangat besar. Model ini tampaknya tidak cocok untuk dataset ini.</li>
 </ul>
-</section>
-</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1350,14 +2744,22 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Data Understanding">Data Understanding</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menampilkan Data">Menampilkan Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menentukan Missing Value">Menentukan Missing Value</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Explorasi Data">Explorasi Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menangani Missing Value">Menangani Missing Value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Explorasi Data (Numeric)">Explorasi Data (Numeric)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Distribusi Data">Distribusi Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menentukan Outlier">Menentukan Outlier</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prepocessing">Prepocessing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Menghapus Outlier">Menghapus Outlier</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualisasi Matriks Korelasi">Visualisasi Matriks Korelasi</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Pemodelan Decision Tree">Pemodelan Decision Tree</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Normalisasi Data">Normalisasi Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Sliding Window">Sliding Window</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Regresi Linear">Regresi Linear</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualisasi Prediksi vs Aktual Regresi Linear">Visualisasi Prediksi vs Aktual Regresi Linear</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Random Forest">Random Forest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualisasi Prediksi vs Aktual Random Forest">Visualisasi Prediksi vs Aktual Random Forest</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Support Vector Regression">Support Vector Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Visualisasi Prediksi vs Aktual SVR">Visualisasi Prediksi vs Aktual SVR</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Evaluasi">Evaluasi</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prediksi">Prediksi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Kesimpulan">Kesimpulan</a></li>
+
 </ul>
   </nav></div>
 
