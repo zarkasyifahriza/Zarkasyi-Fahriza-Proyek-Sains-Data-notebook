@@ -2665,6 +2665,72 @@
   </table>
   </code></pre>
 </div>
+<h1 id="Prediksi">Prediksi</h1>
+<div class="code-box">
+  <pre><code>
+    import pandas as pd
+
+    # Meminta input dari pengguna
+    unit_price = float(input("Masukkan Unit_Price (Harga per unit): "))
+    total_revenue = float(input("Masukkan Total_Revenue (Total Pendapatan): "))
+    
+    # Meminta input untuk Units_Sold_Lag_1 hingga Units_Sold_Lag_7
+    units_sold_lags = []
+    for i in range(1, 8):
+        units_sold_lag = float(input(f"Masukkan Units_Sold_Lag_{i} (Unit Terjual {i} hari yang lalu): "))
+        units_sold_lags.append(units_sold_lag)
+    
+    # Buat DataFrame dari input pengguna
+    new_input = pd.DataFrame({
+        'Unit_Price': [unit_price], 
+        'Total_Revenue': [total_revenue], 
+        'Units_Sold_Lag_1': [units_sold_lags[0]], 
+        'Units_Sold_Lag_2': [units_sold_lags[1]], 
+        'Units_Sold_Lag_3': [units_sold_lags[2]], 
+        'Units_Sold_Lag_4': [units_sold_lags[3]], 
+        'Units_Sold_Lag_5': [units_sold_lags[4]], 
+        'Units_Sold_Lag_6': [units_sold_lags[5]], 
+        'Units_Sold_Lag_7': [units_sold_lags[6]]
+    })
+    
+    # Menampilkan data input pengguna
+    print("\nData Input dari Pengguna:")
+    print(new_input)
+    
+    # Prediksi jumlah unit yang terjual
+    predicted_units_sold = model_rf.predict(new_input)
+    
+    # Menampilkan hasil prediksi
+    print(f"\nPrediksi jumlah unit yang akan terjual: {predicted_units_sold[0]:.2f}")
+    
+  </code></pre>
+</div>
+<div class="code-box">
+  <pre><code>
+    Masukkan Unit_Price (Harga per unit): 90000
+    Masukkan Total_Revenue (Total Pendapatan): 1000000
+    Masukkan Units_Sold_Lag_1 (Unit Terjual 1 hari yang lalu): 20
+    Masukkan Units_Sold_Lag_2 (Unit Terjual 2 hari yang lalu): 30
+    Masukkan Units_Sold_Lag_3 (Unit Terjual 3 hari yang lalu): 70
+    Masukkan Units_Sold_Lag_4 (Unit Terjual 4 hari yang lalu): 20
+    Masukkan Units_Sold_Lag_5 (Unit Terjual 5 hari yang lalu): 30
+    Masukkan Units_Sold_Lag_6 (Unit Terjual 6 hari yang lalu): 21
+    Masukkan Units_Sold_Lag_7 (Unit Terjual 7 hari yang lalu): 10
+
+    Data Input dari Pengguna:
+      Unit_Price  Total_Revenue  Units_Sold_Lag_1  Units_Sold_Lag_2  \
+    0     90000.0      1000000.0              20.0              30.0   
+
+      Units_Sold_Lag_3  Units_Sold_Lag_4  Units_Sold_Lag_5  Units_Sold_Lag_6  \
+    0              70.0              20.0              30.0              21.0   
+
+      Units_Sold_Lag_7  
+    0              10.0  
+
+    Prediksi jumlah unit yang akan terjual: 23.21
+  </code></pre>
+</div>
+
 <h1 id="Kesimpulan">Kesimpulan</h1>
 <ul>
   <li>Random Forest jelas memiliki performa terbaik di antara ketiga model dengan RMSE yang sangat rendah (0.95), R-squared yang sangat tinggi (0.9987), dan MAPE yang sangat kecil (1.65%). Ini menunjukkan bahwa model ini mampu memberikan prediksi yang sangat akurat dan dapat diandalkan.</li>
